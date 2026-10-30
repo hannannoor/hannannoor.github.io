@@ -590,6 +590,14 @@ for(const [id,photo] of Object.entries(activityPhotos)){
 Object.assign(events.find(e=>e.id==='tabletop'),{imageWidth:858,imageHeight:780,imageCropHeight:780});
 Object.assign(events.find(e=>e.id==='poly-forum'),{imageWidth:1200,imageHeight:1600});
 
+// NYAA hiking photographs and Outdoor Living context supplied by Hannan.
+Object.assign(events.find(e=>e.id==='nyaa'),{
+ image:'assets/nyaa-hike.webp',imageAlt:'Hannan on a hike logged toward NYAA Outdoor Living hours',imageWidth:1600,imageHeight:1200,
+ description:'Currently working towards NYAA Gold, including hikes logged toward the Outdoor Living component.',
+ details:['Current NYAA Gold participant.','Logged this hike toward my Outdoor Living hours.'],
+ gallery:[{src:'assets/nyaa-hike.webp',caption:'On a hike I logged toward my NYAA Outdoor Living hours.'},{src:'assets/nyaa-trail.webp',caption:'Exploring the trail during the hike.'}]
+});
+
 export const nodes=[
  {id:'hannan',label:'Hannan Noor',type:'core',position:[0,0,0],description:'Applied AI student, developer and curious person. Explore the projects, people and ideas that connect my work.'},
  ...skillDefinitions.map(([id,label],i)=>({id,label,type:'skill',position:sphericalPosition(i,skillDefinitions.length,2.55),description:`Explore projects connected to ${label}.`})),

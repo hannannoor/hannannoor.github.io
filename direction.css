@@ -102,3 +102,9 @@ html[data-section-moving="true"]{scroll-behavior:auto}
 /* Hannan's requested bottom trim: retain the upper group, crop the lower poster. */
 .community-card[data-community="tabletop"] .community-photo,.network-detail img[src$="tabletop-wizards.webp"]{aspect-ratio:858/780;object-fit:cover;object-position:center top}
 .event-gallery img[src$="tabletop-wizards.webp"]{width:min(100%,calc(70vh * 858 / 780));height:auto;aspect-ratio:858/780;max-height:none;object-fit:cover;object-position:center top;margin-inline:auto}
+
+/* Compact columns let text-only activities sit naturally among photo stories. */
+.community-grid{display:block;columns:2;column-gap:35px}
+.community-grid>.community-card{break-inside:avoid;page-break-inside:avoid;width:100%;box-sizing:border-box}
+.community-card button{margin-top:0}
+@media(max-width:700px){.community-grid{columns:1}}
