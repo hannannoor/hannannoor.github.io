@@ -4,7 +4,7 @@ const featured = [
   {id:'churnguard',number:'02',name:'ChurnGuard',category:'ai',type:'Machine learning',year:'2026',tagline:'Turn customer data into a clearer next step.',description:'Telecom churn analysis and an interactive app for customer scoring, prediction explanations and retention scenarios.',stack:['Python','scikit-learn','Streamlit'],skills:['python','ml'],image:'assets/churnguard.webp',imageAlt:'ChurnGuard customer scoring dashboard from the project documentation',repo:'https://github.com/hannannoor/churnguard',brief:'A prediction is more useful when someone can understand it. ChurnGuard connects a CRISP-DM analysis workflow with an interface for exploring individual customer scores.',details:['Prepared a telco dataset, engineered features and compared machine learning models in a notebook.','Built a Streamlit interface for customer-level scoring and coefficient-based explanations.','Added retention scenarios to explore modelled associations.'],note:'Coursework project. Retention scenarios show model associations, not proven causal effects. No production deployment or business-impact claim is made.',role:'Machine learning and application development',kind:'Coursework'},
   {id:'findr-mobile',number:'03',name:'Findr Mobile',category:'apps',type:'Mobile development',year:'2026',tagline:'A lost-and-found, in your pocket.',description:'A Flutter companion with item reports, claims, chat, maps and AI matching, built around the way students use their phones.',stack:['Flutter','Dart','Firebase'],skills:['flutter','firebase'],image:'assets/findr-mobile.webp',imageAlt:'Findr mobile app screens showing the campus lost-and-found experience',repo:'https://github.com/hannannoor/findr-mobile',demo:'https://youtu.be/EPEnVfJLQjo',brief:'The mobile version of Findr brings reporting, claiming and communicating into a single student-facing experience.',details:['Implemented Firebase authentication, reports and claims, chat, maps, notifications and biometric unlock.','Used Flutter, Dart and Riverpod for the app structure and state management.','Integrated AI matching and demonstrated NETS QR rewards using a sandbox environment.'],note:'Coursework project. NETS integration is a sandbox demonstration, not a production payment or escrow service. A compatible device build and service configuration are required.',role:'Mobile application development',kind:'Coursework'},
   {id:'supplyr',number:'04',name:'Supplyr',category:'automation',type:'Process automation',year:'2026',tagline:'Less repetition. More room to think.',description:'An inventory and supplier-reordering workflow connecting stock data, reorder calculations and purchase-order documents.',stack:['UiPath','Python','MySQL'],skills:['python','sql','uipath'],image:'assets/supplyr.svg',imageAlt:'Illustration of the Supplyr stock-check to purchase-order automation workflow',repo:'https://github.com/hannannoor/supplyr-rpa',demo:'https://youtu.be/GeLmaBBpvoU',brief:'Routine inventory work often crosses spreadsheets, databases and documents. Supplyr explores how those handoffs can become a connected, traceable workflow.',details:['Combined a UiPath workflow with a Python reorder calculator and SQL setup.','Created purchase-order documents with Word, PDF and Excel sample outputs.','Included an audit trail and documented the workflow with a demonstration.'],note:'Coursework project. The workflow requires Windows, Office, database and service configuration. The public copy uses placeholder credentials.',role:'Workflow and automation development',kind:'Coursework'},
-  {id:'skip',number:'05',name:'SKIP',category:'creative',type:'Narrative game',year:'2026',tagline:'You can skip a moment. Not its consequences.',description:'An interactive story about escape, lost time and connection. Developed with a team for SCOGA Anti-Drug Jam 2026.',stack:['JavaScript','HTML / CSS','Browser audio'],skills:['javascript','web'],image:'assets/skip.webp',imageAlt:'SKIP narrative game title screen',repo:'https://github.com/hannannoor/skip',demo:'https://hannannoor.itch.io/skip',demoLabel:'Play the game',brief:'What happens when temporary escape becomes the only response to pressure? SKIP tells that story through a student’s changing relationships, responsibilities and environment.',details:['Developed with a team during SCOGA Anti-Drug Jam 2026.','Built a timeline-driven narrative with branching choices, dialogue and a phone interface.','The available game build includes procedural audio, volume controls and reduced-motion support.'],note:'Team game-jam project. The game did not reach the competition finals. Play it on itch.io or explore the source.',role:'Game development · team project',kind:'Game jam'}
+  {id:'skip',number:'05',name:'SKIP',category:'creative',type:'Narrative game',year:'19 Sep 2026',tagline:'You can skip a moment. Not its consequences.',description:'A published narrative browser game about drug-related choices and their consequences, built with two teammates for the SCOGA Anti-Drug Game Jam 2026.',stack:['JavaScript','HTML / CSS','Browser audio'],skills:['javascript','web'],image:'assets/skip.webp',imageAlt:'SKIP narrative game title screen',repo:'https://github.com/hannannoor/skip',demo:'https://hannannoor.itch.io/skip',demoLabel:'Play the game',brief:'What happens when temporary escape becomes the only response to pressure? SKIP tells that story through a student’s changing relationships, responsibilities and environment.',details:['Developed with two teammates for the Anti-Drug Game Jam associated with SCOGA on 19 September 2026.','Used interactive storytelling, character relationships and an escape mechanic to explore decisions and their consequences.','The available game build includes procedural audio, volume controls and reduced-motion support.'],note:'Completed and publicly published on itch.io. The team did not qualify for the finals.',role:'Game development · team project',kind:'Game jam'}
 ];
 
 const additionalProjects=[
@@ -400,11 +400,12 @@ export const events=[
     "id": "tpla",
     "name": "Temasek LEAD Ambassadors",
     "type": "event",
-    "tagline": "Subcommittee member · Organising and co-organising events",
-    "description": "Helping plan and organise student leadership events, bringing people together around shared activities.",
+    "tagline": "Subcommittee Member · Hike Co-Organiser",
+    "description": "Currently co-organising an upcoming group hike with Temasek LEAD Ambassadors, contributing to event planning, activity coordination and organisational arrangements.",
     "details": [
-      "Current Temasek LEAD Ambassadors subcommittee member.",
-      "Contribute to planning and delivering student leadership events."
+      "Current subcommittee member of Temasek LEAD Ambassadors.",
+      "Co-organising an upcoming group hike.",
+      "Contribute to event planning, activity coordination and organisational arrangements."
     ]
   },
   {
@@ -422,11 +423,12 @@ export const events=[
     "id": "poly-forum",
     "name": "Polytechnic Forum 2026",
     "type": "event",
-    "tagline": "Representing Temasek Polytechnic",
-    "description": "Discussing issues facing Singapore and exchanging perspectives with students from other polytechnics.",
+    "tagline": "Participant · 2026",
+    "description": "Explored social and national issues affecting Singapore, exchanging perspectives with fellow polytechnic students.",
     "details": [
-      "Represented TP at Polytechnic Forum 2026.",
-      "Discussed national issues and ideas for Singapore’s future with students from different polytechnics."
+      "Participated in Polytechnic Forum 2026.",
+      "Discussed social and national issues affecting Singapore with fellow polytechnic students.",
+      "Took part in collaborative activities encouraging critical thinking and discussion of community challenges."
     ],
     "year": "2026"
   },
@@ -456,10 +458,36 @@ export const events=[
     "id": "tabletop",
     "name": "Tabletop Wizards",
     "type": "event",
-    "tagline": "Founding member",
-    "description": "Founding member of the Tabletop Wizards student tabletop gaming CCA.",
+    "tagline": "Founding Member & Head of Logistics",
+    "description": "Co-founded Tabletop Wizards, now an officially recognised CCA at Temasek Polytechnic. I coordinate logistics and support club activities and events.",
     "details": [
-      "Helped establish the Tabletop Wizards CCA as a founding member."
+      "Co-founded the Tabletop Wizards CCA at Temasek Polytechnic.",
+      "Currently serving as Head of Logistics.",
+      "Help organise club activities, coordinate logistics and support events."
+    ]
+  },
+  {
+    "id": "orientation",
+    "name": "IIT Freshmen Orientation 2026",
+    "type": "event",
+    "year": "2026",
+    "tagline": "Orientation Leader · Three-Day Programme",
+    "description": "Guided an assigned class throughout the full three-day freshman orientation, helping new students take part, connect and settle into polytechnic life.",
+    "details": [
+      "Responsible for an assigned class throughout the three-day programme.",
+      "Guided freshmen through activities and facilitated group participation.",
+      "Worked alongside other Orientation Leaders to help freshmen adjust to polytechnic life."
+    ]
+  },
+  {
+    "id": "infocomm-robotics",
+    "name": "Infocomm & Robotics CCA",
+    "type": "event",
+    "tagline": "Vice-Chairman · Secondary School",
+    "description": "Supported CCA activities and member engagement as Vice-Chairman of my secondary school’s Infocomm and Robotics CCA.",
+    "details": [
+      "Held the student leadership position of Vice-Chairman.",
+      "Supported CCA activities and member engagement."
     ]
   }
 ];
@@ -517,6 +545,7 @@ const skillDefinitions=[["python", "Python"], ["ml", "Machine learning"], ["aws"
 export const projects=[...featured.map(p=>({...p,featured:true})),...additionalProjects];
 projects.find(p=>p.id==='cloud-services-case-study').skills=['cloud'];
 projects.find(p=>p.id==='churnguard').relatedRepos=[{name:'Deployment repository',url:'https://github.com/hannannoor/hannan-noor-repo'}];
+projects.find(p=>p.id==='skip').relatedLinks=[{name:'About the game jam',url:'https://scoga-anti-drug-jam-2026.ai.studio/'}];
 export const collections=[{name:'School projects collection',url:'https://github.com/hannannoor/school-projects'}];
 // Real screenshots and documentation figures, selected from the project submissions.
 const projectVisuals={
