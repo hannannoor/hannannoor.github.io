@@ -100,11 +100,17 @@ html{scroll-behavior:smooth;scroll-padding-top:86px}
 .event-gallery figure:only-child img{max-height:75vh}
 html[data-section-moving="true"]{scroll-behavior:auto}
 /* Hannan's requested bottom trim: retain the upper group, crop the lower poster. */
-.community-card[data-community="tabletop"] .community-photo,.network-detail img[src$="tabletop-wizards.webp"]{aspect-ratio:858/780;object-fit:cover;object-position:center top}
-.event-gallery img[src$="tabletop-wizards.webp"]{width:min(100%,calc(70vh * 858 / 780));height:auto;aspect-ratio:858/780;max-height:none;object-fit:cover;object-position:center top;margin-inline:auto}
+.community-card[data-community="tabletop"] .community-photo,.network-detail img[src$="tabletop-wizards.webp"]{aspect-ratio:858/720;object-fit:cover;object-position:center top}
+.event-gallery img[src$="tabletop-wizards.webp"]{width:min(100%,calc(70vh * 858 / 720));height:auto;aspect-ratio:858/720;max-height:none;object-fit:cover;object-position:center top;margin-inline:auto}
 
 /* Compact columns let text-only activities sit naturally among photo stories. */
 .community-grid{display:block;columns:2;column-gap:35px}
 .community-grid>.community-card{break-inside:avoid;page-break-inside:avoid;width:100%;box-sizing:border-box}
 .community-card button{margin-top:0}
 @media(max-width:700px){.community-grid{columns:1}}
+
+/* Snap only between whole sections; oversized sections scroll freely inside. */
+html{scroll-snap-type:y mandatory!important}
+main>section{scroll-snap-align:start;scroll-snap-stop:always}
+.site-footer{scroll-snap-align:end;scroll-snap-stop:always}
+html:has(body.body-locked){scroll-snap-type:none!important}

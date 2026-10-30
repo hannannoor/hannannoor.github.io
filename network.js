@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {nodes,edges,projects,events,certificates,relatedNodes} from './content.js?v=8';
+import {nodes,edges,projects,events,certificates,relatedNodes} from './content.js?v=9';
 import {pulsePosition} from './network-math.js';
 import {shouldRotate,cameraFocus,orbitPosition} from './motion.js';
 

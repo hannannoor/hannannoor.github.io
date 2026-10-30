@@ -587,7 +587,7 @@ const activityPhotos={
 for(const [id,photo] of Object.entries(activityPhotos)){
  Object.assign(events.find(e=>e.id===id),{image:'assets/'+photo.file,imageAlt:photo.alt,imageWidth:1600,imageHeight:1200,gallery:[{src:'assets/'+photo.file,caption:photo.caption}]});
 }
-Object.assign(events.find(e=>e.id==='tabletop'),{imageWidth:858,imageHeight:780,imageCropHeight:780});
+Object.assign(events.find(e=>e.id==='tabletop'),{imageWidth:858,imageHeight:720,imageCropHeight:720});
 Object.assign(events.find(e=>e.id==='poly-forum'),{imageWidth:1200,imageHeight:1600});
 
 // NYAA hiking photographs and Outdoor Living context supplied by Hannan.
