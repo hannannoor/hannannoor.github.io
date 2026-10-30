@@ -91,3 +91,11 @@ html{scroll-behavior:smooth;scroll-padding-top:86px}
 @media(max-width:900px){.capability-grid{grid-template-columns:1fr;gap:30px}.capability-grid article{border-bottom:1px solid #bdcbdc;padding-bottom:24px}.capability-grid h4{margin:9px 0}.capability-grid button{display:inline-block}}
 @media(max-width:700px){html{scroll-padding-top:75px}.site-header{position:sticky;top:0}.awards-grid{grid-template-columns:1fr;gap:30px}.awards-panel,.capabilities-panel{padding:32px 0}.award-entry{padding-left:18px}.panel-heading h3{font-size:30px}.award-entry h4{font-size:24px}.service-panel .work-experience{font-size:17px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal,.js-ready .reveal{transform:none;opacity:1;transition:none}}
+
+/* Activity photographs keep their own proportions, including portraits/posters. */
+.community-card .community-photo,.community-card[data-community="tabletop"] .community-photo{height:auto;max-height:none;aspect-ratio:var(--photo-ratio,4/3);object-fit:contain;object-position:center;width:100%;background:#e1e8f3}
+.community-card[data-community="iitsc"] .community-photo{aspect-ratio:16/9;object-fit:cover;object-position:center bottom}
+.community-card[data-community="tpla"] .community-photo{aspect-ratio:16/10;object-fit:cover;object-position:center bottom}
+.event-gallery figure:only-child{grid-column:1/-1}
+.event-gallery figure:only-child img{max-height:75vh}
+html[data-section-moving="true"]{scroll-behavior:auto}

@@ -577,6 +577,19 @@ projects.find(p=>p.id==='skip').networkImage='assets/skip-gameplay.webp';
 projects.find(p=>p.id==='skip').gallery.unshift({src:'assets/skip-gameplay.webp',caption:'A moment from SKIP’s branching story.'});
 Object.assign(projects.find(p=>p.id==='supplyr'),{image:'assets/supplyr-slide-1.svg',imageAlt:'Supplyr presentation cover — automated stock detection and supplier reordering robot',imageLabel:'PRESENTATION COVER',networkImage:'assets/supplyr-orb-slide.svg',gallery:[{src:'assets/supplyr-slide-3.svg',caption:'The end-to-end process from the original Supplyr presentation.'},{src:'assets/supplyr-validation.webp',caption:'The implemented database pre-flight validation workflow.'},{src:'assets/supplyr-runs.webp',caption:'Successful unattended job runs in UiPath.'}]});
 
+// Activity photographs supplied and labelled by Hannan, 30 October 2026.
+const activityPhotos={
+ iitsc:{file:'iitsc-group.webp',alt:'IITSC group gathered in the auditorium',caption:'IIT Students’ Council — the auditorium group.'},
+ orientation:{file:'fmo-leaders.webp',alt:'Four IIT Freshmen Orientation leaders cheering in blue Team Temasek shirts',caption:'FMO 2026 — supporting freshmen as Orientation Leaders.'},
+ sylp:{file:'sylp-group.webp',alt:'SYLP group beneath the illuminated globe at the NYC Leaders Course',caption:'SYLP — learning together through the NYC Leaders Course.'},
+ tpla:{file:'tpla-group.webp',alt:'Temasek LEAD Ambassadors seated together for a group photograph',caption:'Temasek LEAD Ambassadors — our group together.'}
+};
+for(const [id,photo] of Object.entries(activityPhotos)){
+ Object.assign(events.find(e=>e.id===id),{image:'assets/'+photo.file,imageAlt:photo.alt,imageWidth:1600,imageHeight:1200,gallery:[{src:'assets/'+photo.file,caption:photo.caption}]});
+}
+Object.assign(events.find(e=>e.id==='tabletop'),{imageWidth:858,imageHeight:1280});
+Object.assign(events.find(e=>e.id==='poly-forum'),{imageWidth:1200,imageHeight:1600});
+
 export const nodes=[
  {id:'hannan',label:'Hannan Noor',type:'core',position:[0,0,0],description:'Applied AI student, developer and curious person. Explore the projects, people and ideas that connect my work.'},
  ...skillDefinitions.map(([id,label],i)=>({id,label,type:'skill',position:sphericalPosition(i,skillDefinitions.length,2.55),description:`Explore projects connected to ${label}.`})),
