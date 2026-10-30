@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {nodes,edges,projects,events,certificates,relatedNodes} from './content.js?v=5';
+import {nodes,edges,projects,events,certificates,relatedNodes} from './content.js?v=6';
 import {pulsePosition} from './network-math.js';
 import {shouldRotate,cameraFocus,orbitPosition} from './motion.js';
 
@@ -32,8 +32,9 @@ export async function createNetwork(container,labelLayer,onSelect){
   ctx.save();ctx.beginPath();ctx.arc(256,256,244,0,Math.PI*2);ctx.clip();
   ctx.fillStyle=node.type==='core'?'#245aff':node.type==='event'?'#25416b':node.type==='certificate'?'#284a55':'#192c47';ctx.fillRect(0,0,512,512);
   if(image){
-   const scale=Math.max(488/image.width,488/image.height),w=image.width*scale,h=image.height*scale;
-   ctx.drawImage(image,256-w/2,256-h/2,w,h);
+   const sourceHeight=Math.min(image.height,getItem(node.id)?.imageCropHeight||image.height);
+   const scale=Math.max(488/image.width,488/sourceHeight),w=image.width*scale,h=sourceHeight*scale;
+   ctx.drawImage(image,0,0,image.width,sourceHeight,256-w/2,256-h/2,w,h);
    const shade=ctx.createRadialGradient(210,180,70,256,256,250);shade.addColorStop(0,'#07101a00');shade.addColorStop(.7,'#07101a00');shade.addColorStop(1,'#07101a75');ctx.fillStyle=shade;ctx.fillRect(0,0,512,512);
   }else{
    const glow=ctx.createRadialGradient(140,100,0,256,256,300);glow.addColorStop(0,'#79b1ff');glow.addColorStop(.45,'#245aff');glow.addColorStop(1,'#142849');ctx.fillStyle=glow;ctx.fillRect(0,0,512,512);
