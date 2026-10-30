@@ -100,5 +100,5 @@ html{scroll-behavior:smooth;scroll-padding-top:86px}
 .event-gallery figure:only-child img{max-height:75vh}
 html[data-section-moving="true"]{scroll-behavior:auto}
 /* Hannan's requested bottom trim: retain the upper group, crop the lower poster. */
-.community-card[data-community="tabletop"] .community-photo,.network-detail img[src$="tabletop-wizards.webp"]{aspect-ratio:858/820;object-fit:cover;object-position:center top}
-.event-gallery img[src$="tabletop-wizards.webp"]{width:min(100%,calc(70vh * 858 / 820));height:auto;aspect-ratio:858/820;max-height:none;object-fit:cover;object-position:center top;margin-inline:auto}
+.community-card[data-community="tabletop"] .community-photo,.network-detail img[src$="tabletop-wizards.webp"]{aspect-ratio:858/780;object-fit:cover;object-position:center top}
+.event-gallery img[src$="tabletop-wizards.webp"]{width:min(100%,calc(70vh * 858 / 780));height:auto;aspect-ratio:858/780;max-height:none;object-fit:cover;object-position:center top;margin-inline:auto}

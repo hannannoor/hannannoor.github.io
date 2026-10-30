@@ -1,5 +1,5 @@
-import {installSectionScroll} from './section-scroll.js?v=6';
-import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=6';
+import {installSectionScroll} from './section-scroll.js?v=7';
+import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=7';
 const $=s=>document.querySelector(s),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external='target="_blank" rel="noopener noreferrer"',motion=matchMedia('(prefers-reduced-motion: reduce)');
 document.body.classList.add('js-ready');
@@ -85,7 +85,7 @@ document.addEventListener('keydown',e=>{
 function fallback(message){$('#network-fallback').textContent=message||'Explore every project and connection using the list below.';$('#network-fallback').hidden=false;$('#network-hint').hidden=true;$('#connection-browser').hidden=false;$('#browse-toggle').setAttribute('aria-expanded','true');['#pause-network','#zoom-in','#zoom-out'].forEach(s=>$(s).hidden=true);$('#node-labels').hidden=true;$('#network-canvas').hidden=true;}
 $('#network-canvas').addEventListener('network-unavailable',()=>fallback());
 if(new URLSearchParams(location.search).get('view')==='static')fallback('A lighter way to connect the dots. Browse all projects, skills and activities below.');
-else import('./network.js?v=6').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
+else import('./network.js?v=7').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
 
 const sections=[...document.querySelectorAll('main>section')];let currentSection=0;
 function updatePager(){const mid=innerHeight*.35;let i=0;sections.forEach((s,j)=>{if(s.getBoundingClientRect().top<=mid)i=j;});currentSection=i;$('#section-count').textContent=`${String(i+1).padStart(2,'0')} / ${String(sections.length).padStart(2,'0')}`;$('#section-previous').disabled=i===0;$('#section-next').disabled=i===sections.length-1;
