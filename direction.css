@@ -109,8 +109,7 @@ html[data-section-moving="true"]{scroll-behavior:auto}
 .community-card button{margin-top:0}
 @media(max-width:700px){.community-grid{columns:1}}
 
-/* Snap only between whole sections; oversized sections scroll freely inside. */
-html{scroll-snap-type:y mandatory!important}
-main>section{scroll-snap-align:start;scroll-snap-stop:always}
-.site-footer{scroll-snap-align:end;scroll-snap-stop:always}
-html:has(body.body-locked){scroll-snap-type:none!important}
+/* Free, native scrolling: no snapping. Most sections are several screens tall,
+   and snapping them made the page pull back at section ends and then jump. */
+html{scroll-snap-type:none!important}
+main>section,.site-footer{scroll-snap-align:none;scroll-snap-stop:normal}
