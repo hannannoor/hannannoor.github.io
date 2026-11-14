@@ -113,3 +113,8 @@ html[data-section-moving="true"]{scroll-behavior:auto}
    and snapping them made the page pull back at section ends and then jump. */
 html{scroll-snap-type:none!important}
 main>section,.site-footer{scroll-snap-align:none;scroll-snap-stop:normal}
+
+/* Designed cover thumbnails (assets/thumbs) fill their frame edge to edge. */
+.project-visual img[src*="assets/thumbs/"],.project-card[data-id] .project-visual img[src*="assets/thumbs/"]{object-fit:cover;padding:0;transform:none;filter:none}
+.project-visual:hover img[src*="assets/thumbs/"]{transform:scale(1.03)}
+.archive-thumb.is-cover{object-fit:cover}
