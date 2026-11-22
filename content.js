@@ -1,3 +1,4 @@
+import {enrichCaseStudies} from './case-studies.js?v=12';
 import {sphericalPosition} from './motion.js';
 const featured = [
   {id:'findr-cloud',number:'01',name:'Findr Cloud',category:'cloud',type:'Cloud + AI',year:'2026',tagline:'Lost things. Found connections.',description:'A campus lost-and-found platform that brings image analysis, item matching and ownership verification into one place.',stack:['AWS','Python','JavaScript'],skills:['aws','python','javascript'],image:'assets/findr-cloud.webp',imageAlt:'Findr Cloud campus lost-and-found interface',repo:'https://github.com/hannannoor/findr-cloud',demo:'https://youtu.be/hrbYugO_jg8',brief:'Losing something on campus should not mean searching through scattered chats and noticeboards. Findr explores how cloud services and image analysis can make the search more useful.',details:['Implemented seven AWS Lambda functions alongside a web frontend for authenticated lost-and-found reports.','Added private image access, multilingual listings, a campus map and ownership verification.','Documented the architecture and produced a narrated demonstration.'],note:'Coursework project. The original cloud deployment is archived; the source and recorded demonstration are available.',role:'Cloud application development',kind:'Coursework'},
@@ -434,13 +435,13 @@ export const events=[
   },
   {
     "id": "iitsc",
-    "name": "IIT Students’ Council",
+    "name": "IIT Studies Club",
     "type": "event",
     "tagline": "Active member · IITSC involvement",
     "description": "Sustained involvement in IITSC activities, team bonding and subcommittee engagement across two academic years.",
     "details": [
-      "Participated in IITSC Sub-Committee Engagement, Chill Night and Team Bonding Camp in 2025.",
-      "Participated in IITSC Sub-comm Welcome Day and Camp Wildcard in 2026."
+      "Participated in IIT Studies Club Sub-Committee Engagement, Chill Night and Team Bonding Camp in 2025.",
+      "Participated in IIT Studies Club Sub-comm Welcome Day and Camp Wildcard in 2026."
     ]
   },
   {
@@ -579,7 +580,7 @@ Object.assign(projects.find(p=>p.id==='supplyr'),{image:'assets/supplyr-slide-1.
 
 // Activity photographs supplied and labelled by Hannan, 30 October 2026.
 const activityPhotos={
- iitsc:{file:'iitsc-group.webp',alt:'IITSC group gathered in the auditorium',caption:'IIT Students’ Council — the auditorium group.'},
+ iitsc:{file:'iitsc-group.webp',alt:'IITSC group gathered in the auditorium',caption:'IIT Studies Club — the auditorium group.'},
  orientation:{file:'fmo-leaders.webp',alt:'Four IIT Freshmen Orientation leaders cheering in blue Team Temasek shirts',caption:'FMO 2026 — supporting freshmen as Orientation Leaders.'},
  sylp:{file:'sylp-group.webp',alt:'SYLP group beneath the illuminated globe at the NYC Leaders Course',caption:'SYLP — learning together through the NYC Leaders Course.'},
  tpla:{file:'tpla-group.webp',alt:'Temasek LEAD Ambassadors seated together for a group photograph',caption:'Temasek LEAD Ambassadors — our group together.'}
@@ -597,6 +598,8 @@ Object.assign(events.find(e=>e.id==='nyaa'),{
  details:['Current NYAA Gold participant.','Logged this hike toward my Outdoor Living hours.'],
  gallery:[{src:'assets/nyaa-hike.webp',caption:'On a hike I logged toward my NYAA Outdoor Living hours.'},{src:'assets/nyaa-trail.webp',caption:'Exploring the trail during the hike.'}]
 });
+
+enrichCaseStudies(projects,events);
 
 export const nodes=[
  {id:'hannan',label:'Hannan Noor',type:'core',position:[0,0,0],description:'Applied AI student, developer and curious person. Explore the projects, people and ideas that connect my work.'},

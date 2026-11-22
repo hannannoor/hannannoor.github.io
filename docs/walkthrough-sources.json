@@ -1,0 +1,248 @@
+[
+  {
+    "asset": "assets/walkthroughs/findr-cloud-04.webp",
+    "report": "ctai-findr-project-presentation-revision-4.pptx",
+    "media": "ppt/media/image-2-2.png",
+    "title": "Search one shared lost-and-found board"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-cloud-06.webp",
+    "report": "ctai-findr-project-presentation-revision-4.pptx",
+    "media": "ppt/media/image-3-2.png",
+    "title": "See where an item was reported"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-cloud-18.webp",
+    "report": "ctai-findr-project-report.docx",
+    "media": "word/media/62dafcc15666b4376966dc4ad411606e10b12da9.png",
+    "title": "Use image analysis as a starting point"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-cloud-09.webp",
+    "report": "ctai-findr-project-presentation-revision-4.pptx",
+    "media": "ppt/media/image-6-1.png",
+    "title": "Check a claim before arranging collection"
+  },
+  {
+    "asset": "assets/walkthroughs/churnguard-05.webp",
+    "report": "mldp-program-codes-submission.docx",
+    "media": "word/media/image6.png",
+    "title": "From customer details to a risk estimate"
+  },
+  {
+    "asset": "assets/walkthroughs/churnguard-04.webp",
+    "report": "mldp-program-codes-submission.docx",
+    "media": "word/media/image5.png",
+    "title": "Explain the score and explore scenarios"
+  },
+  {
+    "asset": "assets/walkthroughs/churnguard-06.webp",
+    "report": "mldp-program-codes-submission.docx",
+    "media": "word/media/image7.png",
+    "title": "Compare a different customer profile"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-mobile-30.webp",
+    "report": "mbap-findr-final-presentation.pptx",
+    "media": "ppt/media/image3.png",
+    "title": "Sign in before accessing reports"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-mobile-31.webp",
+    "report": "mbap-findr-final-presentation.pptx",
+    "media": "ppt/media/image4.png",
+    "title": "Review a report before publishing"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-mobile-36.webp",
+    "report": "mbap-findr-final-presentation.pptx",
+    "media": "ppt/media/image9.png",
+    "title": "Explore possible matches"
+  },
+  {
+    "asset": "assets/walkthroughs/findr-mobile-39.webp",
+    "report": "mbap-findr-final-presentation.pptx",
+    "media": "ppt/media/image13.png",
+    "title": "Keep the search grounded on campus"
+  },
+  {
+    "asset": "assets/walkthroughs/supplyr-rpa-10.webp",
+    "report": "rpa-supplyr-project-report-revision-5.pptx",
+    "media": "ppt/media/image18.png",
+    "title": "Validate the database before processing"
+  },
+  {
+    "asset": "assets/walkthroughs/supplyr-rpa-07.webp",
+    "report": "rpa-supplyr-project-report-revision-5.pptx",
+    "media": "ppt/media/image8.png",
+    "title": "Check the generated purchase order"
+  },
+  {
+    "asset": "assets/walkthroughs/supplyr-rpa-08.webp",
+    "report": "rpa-supplyr-project-report-revision-5.pptx",
+    "media": "ppt/media/image9.png",
+    "title": "Export a document for the supplier"
+  },
+  {
+    "asset": "assets/walkthroughs/supplyr-rpa-13.webp",
+    "report": "rpa-supplyr-project-report-revision-5.pptx",
+    "media": "ppt/media/image15.png",
+    "title": "Record unattended executions"
+  },
+  {
+    "asset": "assets/walkthroughs/animal-adoption-02.webp",
+    "report": "adev-dbav-project-2-report.docx",
+    "media": "word/media/image4.png",
+    "title": "Browse animals and narrow the list"
+  },
+  {
+    "asset": "assets/walkthroughs/animal-adoption-10.webp",
+    "report": "adev-dbav-project-2-report.docx",
+    "media": "word/media/image5.png",
+    "title": "Inspect an individual animal"
+  },
+  {
+    "asset": "assets/walkthroughs/animal-adoption-07.webp",
+    "report": "adev-dbav-project-2-report.docx",
+    "media": "word/media/image12.png",
+    "title": "Submit an adoption application"
+  },
+  {
+    "asset": "assets/walkthroughs/animal-adoption-01.webp",
+    "report": "adev-dbav-project-2-report.docx",
+    "media": "word/media/image8.png",
+    "title": "Manage listings from the admin view"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-website-02.webp",
+    "report": "adev-dbav-project-1-report.docx",
+    "media": "word/media/image10.png",
+    "title": "Introduce ByteBite"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-website-03.webp",
+    "report": "adev-dbav-project-1-report.docx",
+    "media": "word/media/image11.png",
+    "title": "Browse the menu"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-website-04.webp",
+    "report": "adev-dbav-project-1-report.docx",
+    "media": "word/media/image12.png",
+    "title": "Show the order-status concept"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-website-16.webp",
+    "report": "adev-dbav-project-1-report.docx",
+    "media": "word/media/image9.png",
+    "title": "Design the relational structure"
+  },
+  {
+    "asset": "assets/walkthroughs/transport-fare-calculator-05.webp",
+    "report": "comt-project-2-completed-report.docx",
+    "media": "word/media/image5.png",
+    "title": "Plan the decisions before coding"
+  },
+  {
+    "asset": "assets/walkthroughs/transport-fare-calculator-02.webp",
+    "report": "comt-project-2-completed-report.docx",
+    "media": "word/media/image2.png",
+    "title": "Check a sample fare calculation"
+  },
+  {
+    "asset": "assets/walkthroughs/transport-fare-calculator-06.webp",
+    "report": "comt-project-2-completed-report.docx",
+    "media": "word/media/image6.png",
+    "title": "Summarise a multi-trip journey"
+  },
+  {
+    "asset": "assets/walkthroughs/campus-navigation-05.webp",
+    "report": "comt-comt-ay2526-project-1.docx",
+    "media": "word/media/image5.png",
+    "title": "Compare routes on the campus map"
+  },
+  {
+    "asset": "assets/walkthroughs/campus-navigation-06.webp",
+    "report": "comt-comt-ay2526-project-1.docx",
+    "media": "word/media/image6.png",
+    "title": "Turn route choices into decision logic"
+  },
+  {
+    "asset": "assets/walkthroughs/campus-navigation-03.webp",
+    "report": "comt-comt-ay2526-project-1.docx",
+    "media": "word/media/image3.jpeg",
+    "title": "Ground the route in the actual campus"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-data-analytics-07.webp",
+    "report": "dava-da-assignment-report.docx",
+    "media": "word/media/image75.png",
+    "title": "Connect preparation, clustering and prediction"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-data-analytics-28.webp",
+    "report": "dava-da-assignment-report.docx",
+    "media": "word/media/image27.png",
+    "title": "Check missing values after preparation"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-data-analytics-49.webp",
+    "report": "dava-da-assignment-report.docx",
+    "media": "word/media/image54.png",
+    "title": "Explore the customer clusters in Power BI"
+  },
+  {
+    "asset": "assets/walkthroughs/restaurant-data-analytics-02.webp",
+    "report": "dava-da-assignment-report.docx",
+    "media": "word/media/image70.png",
+    "title": "Evaluate predictions with error metrics"
+  },
+  {
+    "asset": "assets/walkthroughs/network-design-03.webp",
+    "report": "nect-network-report.docx",
+    "media": "word/media/image2.png",
+    "title": "Connect the office and warehouse"
+  },
+  {
+    "asset": "assets/walkthroughs/network-design-17.webp",
+    "report": "nect-network-report.docx",
+    "media": "word/media/image17.png",
+    "title": "Verify automatic address assignment"
+  },
+  {
+    "asset": "assets/walkthroughs/network-design-15.webp",
+    "report": "nect-network-report.docx",
+    "media": "word/media/image15.png",
+    "title": "Test the internal web service"
+  },
+  {
+    "asset": "assets/walkthroughs/network-design-19.webp",
+    "report": "nect-network-report.docx",
+    "media": "word/media/image19.png",
+    "title": "Check another web destination"
+  },
+  {
+    "asset": "assets/walkthroughs/windows-security-lab-02.webp",
+    "report": "cyfun-project-report.docx",
+    "media": "word/media/image4.png",
+    "title": "Test a restricted file"
+  },
+  {
+    "asset": "assets/walkthroughs/windows-security-lab-20.webp",
+    "report": "cyfun-project-report.docx",
+    "media": "word/media/image20.png",
+    "title": "Load the local test service"
+  },
+  {
+    "asset": "assets/walkthroughs/windows-security-lab-19.webp",
+    "report": "cyfun-project-report.docx",
+    "media": "word/media/image19.png",
+    "title": "Configure the web-service bindings"
+  },
+  {
+    "asset": "assets/walkthroughs/windows-security-lab-24.webp",
+    "report": "cyfun-project-report.docx",
+    "media": "word/media/image31.png",
+    "title": "Compare a benchmark check before and after"
+  }
+]
