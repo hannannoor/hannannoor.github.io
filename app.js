@@ -1,5 +1,5 @@
-import {installSectionScroll} from './section-scroll.js?v=12';
-import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=12';
+import {installSectionScroll} from './section-scroll.js?v=13';
+import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=13';
 const $=s=>document.querySelector(s),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external='target="_blank" rel="noopener noreferrer"',motion=matchMedia('(prefers-reduced-motion: reduce)');
 document.body.classList.add('js-ready');
@@ -67,21 +67,39 @@ $('#reset-network').addEventListener('click',()=>{selectNode('hannan',false);gra
 $('#pause-network').addEventListener('click',()=>{const paused=$('#pause-network').getAttribute('aria-pressed')!=='true';$('#pause-network').setAttribute('aria-pressed',String(paused));$('#pause-network').textContent=paused?'RESUME MOTION':'PAUSE MOTION';graph?.pause(paused);});
 $('#zoom-in').addEventListener('click',()=>graph?.zoom(.88));$('#zoom-out').addEventListener('click',()=>graph?.zoom(1.14));
 
-let fullscreenFocus=null,placeholder=null,transitioning=false;
+let fullscreenFocus=null,placeholder=null,transitioning=false,stageOffset=null;
 function lockBackground(value){document.querySelectorAll('.skip-link,.site-header,.hero-copy,.hero-kicker,.hero-rule,main>section:not(.hero),.site-footer,.section-pager').forEach(el=>el.inert=value);}
+// Open and close by revealing a window (clip-path) between the inline canvas and the full screen.
+// Nothing is scaled, so text, labels and the graph never stretch.
+const clipFor=r=>`inset(${Math.max(0,r.top)}px ${Math.max(0,innerWidth-r.right)}px ${Math.max(0,innerHeight-r.bottom)}px ${Math.max(0,r.left)}px round 10px)`;
+const fullClip='inset(0px 0px 0px 0px round 0px)';
+const chrome=zone=>zone.querySelectorAll('.network-heading,.network-toolbar,.network-detail,.connection-browser:not([hidden]),.close-network');
 async function setFullscreen(open,id){
  const zone=$('#network-zone');if(transitioning||open===zone.classList.contains('fullscreen')){if(id)selectNode(id);return;}transitioning=true;
- const old=zone.getBoundingClientRect();
+ const animate=!motion.matches;
  if(open){
-  fullscreenFocus=document.activeElement;placeholder=document.createElement('div');placeholder.className='network-placeholder';placeholder.style.height=old.height+'px';zone.before(placeholder);
+  const oldZone=zone.getBoundingClientRect(),oldStage=zone.querySelector('.network-stage').getBoundingClientRect();
+  stageOffset={x:oldStage.left-oldZone.left,y:oldStage.top-oldZone.top,w:oldStage.width,h:oldStage.height};
+  fullscreenFocus=document.activeElement;placeholder=document.createElement('div');placeholder.className='network-placeholder';placeholder.style.height=oldZone.height+'px';zone.before(placeholder);
   zone.classList.add('fullscreen');zone.setAttribute('role','dialog');zone.setAttribute('aria-modal','true');$('#close-network').hidden=false;$('#expand-network').setAttribute('aria-expanded','true');lockBackground(true);syncLock();
-  const next=zone.getBoundingClientRect();graph?.expand(true,id);if(id)selectNode(id,false);
-  if(!motion.matches)await zone.animate([{transform:`translate(${old.x-next.x}px,${old.y-next.y}px) scale(${old.width/next.width},${old.height/next.height})`,borderRadius:'8px'},{transform:'none',borderRadius:'0'}],{duration:780,easing:'cubic-bezier(.22,.8,.22,1)',transformOrigin:'top left'}).finished;
+  graph?.expand(true,id);if(id)selectNode(id,false);
+  if(animate){
+   const reveal=zone.animate([{clipPath:clipFor(oldStage)},{clipPath:fullClip}],{duration:720,easing:'cubic-bezier(.65,0,.15,1)'});
+   chrome(zone).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:420,delay:380+i*45,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+   await reveal.finished;
+  }
   $('#close-network').focus();
  }else{
-  const next=placeholder.getBoundingClientRect();graph?.expand(false);
-  if(!motion.matches)await zone.animate([{transform:'none'},{transform:`translate(${next.x-old.x}px,${next.y-old.y}px) scale(${next.width/old.width},${next.height/old.height})`}],{duration:650,easing:'cubic-bezier(.65,0,.35,1)',transformOrigin:'top left'}).finished;
-  zone.classList.remove('fullscreen');zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus();
+  graph?.expand(false);
+  if(animate){
+   await Promise.all([...chrome(zone)].map(el=>el.animate([{opacity:1},{opacity:0}],{duration:180,easing:'ease-out',fill:'forwards'}).finished));
+   const p=placeholder.getBoundingClientRect();
+   const target={left:p.left+stageOffset.x,top:p.top+stageOffset.y,right:p.left+stageOffset.x+stageOffset.w,bottom:p.top+stageOffset.y+stageOffset.h};
+   await zone.animate([{clipPath:fullClip},{clipPath:clipFor(target)}],{duration:560,easing:'cubic-bezier(.55,0,.25,1)',fill:'forwards'}).finished;
+  }
+  zone.getAnimations({subtree:true}).forEach(a=>a.cancel());
+  zone.classList.remove('fullscreen');zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus({preventScroll:true});
+  if(animate)zone.querySelector('.network-stage').animate([{opacity:.6},{opacity:1}],{duration:260,easing:'ease-out'});
  }transitioning=false;
 }
 $('#expand-network').addEventListener('click',()=>setFullscreen(!$('#network-zone').classList.contains('fullscreen')));$('#close-network').addEventListener('click',()=>setFullscreen(false));
@@ -92,7 +110,7 @@ document.addEventListener('keydown',e=>{
 function fallback(message){$('#network-fallback').textContent=message||'Explore every project and connection using the list below.';$('#network-fallback').hidden=false;$('#network-hint').hidden=true;$('#connection-browser').hidden=false;$('#browse-toggle').setAttribute('aria-expanded','true');['#pause-network','#zoom-in','#zoom-out'].forEach(s=>$(s).hidden=true);$('#node-labels').hidden=true;$('#network-canvas').hidden=true;}
 $('#network-canvas').addEventListener('network-unavailable',()=>fallback());
 if(new URLSearchParams(location.search).get('view')==='static')fallback('A lighter way to connect the dots. Browse all projects, skills and activities below.');
-else import('./network.js?v=12').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
+else import('./network.js?v=13').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
 
 const sections=[...document.querySelectorAll('main>section')];let currentSection=0;
 function updatePager(){const mid=innerHeight*.35;let i=0;sections.forEach((s,j)=>{if(s.getBoundingClientRect().top<=mid)i=j;});currentSection=i;$('#section-count').textContent=`${String(i+1).padStart(2,'0')} / ${String(sections.length).padStart(2,'0')}`;$('#section-previous').disabled=i===0;$('#section-next').disabled=i===sections.length-1;
