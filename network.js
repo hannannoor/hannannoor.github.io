@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {nodes,edges,projects,events,certificates,relatedNodes} from './content.js?v=13';
+import {nodes,edges,projects,events,certificates,relatedNodes} from './content.js?v=14';
 import {pulsePosition} from './network-math.js';
 import {shouldRotate,cameraFocus,orbitPosition} from './motion.js';
 
@@ -119,5 +119,6 @@ export async function createNetwork(container,labelLayer,onSelect){
   if(!reduced.matches&&!paused||tween||interacting||settling||intro<1)schedule();
  }
  function schedule(){if(!running&&visible&&!document.hidden){running=true;raf=requestAnimationFrame(draw);}}
- resize();setRotation();schedule();return {select,expand,reset,zoom,pause,trace,resize};
+ resize();setRotation();schedule();function renderNow(){resize(false);renderer.render(scene,camera);}
+ return {select,expand,reset,zoom,pause,trace,resize,renderNow};
 }

@@ -1,5 +1,6 @@
-import {installSectionScroll} from './section-scroll.js?v=13';
-import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=13';
+import {installSectionScroll} from './section-scroll.js?v=14';
+import {installSearch} from './search.js?v=14';
+import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=14';
 const $=s=>document.querySelector(s),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external='target="_blank" rel="noopener noreferrer"',motion=matchMedia('(prefers-reduced-motion: reduce)');
 document.body.classList.add('js-ready');
@@ -69,39 +70,59 @@ $('#zoom-in').addEventListener('click',()=>graph?.zoom(.88));$('#zoom-out').addE
 
 let fullscreenFocus=null,placeholder=null,transitioning=false,stageOffset=null;
 function lockBackground(value){document.querySelectorAll('.skip-link,.site-header,.hero-copy,.hero-kicker,.hero-rule,main>section:not(.hero),.site-footer,.section-pager').forEach(el=>el.inert=value);}
-// Open and close by revealing a window (clip-path) between the inline canvas and the full screen.
-// Nothing is scaled, so text, labels and the graph never stretch.
-const clipFor=r=>`inset(${Math.max(0,r.top)}px ${Math.max(0,innerWidth-r.right)}px ${Math.max(0,innerHeight-r.bottom)}px ${Math.max(0,r.left)}px round 10px)`;
-const fullClip='inset(0px 0px 0px 0px round 0px)';
-const chrome=zone=>zone.querySelectorAll('.network-heading,.network-toolbar,.network-detail,.connection-browser:not([hidden]),.close-network');
+// Morph: the live 3D canvas itself grows from its place on the page to its full-screen spot
+// (and back). Its real size changes every frame and the graph re-renders at that size,
+// so nothing is ever stretched. The dark backdrop and the panels fade around it.
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const rectOf=el=>{const r=el.getBoundingClientRect();return {x:r.left,y:r.top,w:r.width,h:r.height};};
+const chrome=zone=>[...zone.querySelectorAll('.network-heading,.network-toolbar,.network-detail,.connection-browser:not([hidden]),.close-network')];
+function morph(stage,from,to,duration){
+ // The stage keeps its grid cell; an explicit size + translate place it anywhere in between.
+ const home=to.home;stage.style.willChange='transform';stage.style.position='relative';stage.style.zIndex='3';
+ return new Promise(done=>{const start=performance.now();
+  (function frame(now){const t=Math.min(1,(now-start)/duration),k=ease(t);
+   const x=from.x+(to.x-from.x)*k,y=from.y+(to.y-from.y)*k,w=from.w+(to.w-from.w)*k,h=from.h+(to.h-from.h)*k;
+   stage.style.width=w+'px';stage.style.height=h+'px';stage.style.minHeight='0';stage.style.maxHeight='none';stage.style.flexShrink='0';
+   stage.style.transform=`translate(${x-home.x}px,${y-home.y}px)`;stage.style.borderRadius=`${from.r+(to.r-from.r)*k}px`;
+   graph?.renderNow?graph.renderNow():graph?.resize(false);
+   if(t<1)requestAnimationFrame(frame);else done();
+  })(start);
+ });
+}
+function clearMorph(stage){['width','height','minHeight','maxHeight','flexShrink','transform','borderRadius','position','zIndex','willChange'].forEach(k=>stage.style[k]='');graph?.resize(false);}
 async function setFullscreen(open,id){
- const zone=$('#network-zone');if(transitioning||open===zone.classList.contains('fullscreen')){if(id)selectNode(id);return;}transitioning=true;
+ const zone=$('#network-zone'),stage=zone.querySelector('.network-stage');
+ if(transitioning||open===zone.classList.contains('fullscreen')){if(id)selectNode(id);return;}transitioning=true;
  const animate=!motion.matches;
+ try{
  if(open){
-  const oldZone=zone.getBoundingClientRect(),oldStage=zone.querySelector('.network-stage').getBoundingClientRect();
-  stageOffset={x:oldStage.left-oldZone.left,y:oldStage.top-oldZone.top,w:oldStage.width,h:oldStage.height};
+  const oldZone=zone.getBoundingClientRect(),from=rectOf(stage);
+  stageOffset={x:from.x-oldZone.left,y:from.y-oldZone.top,w:from.w,h:from.h};from.r=10;
   fullscreenFocus=document.activeElement;placeholder=document.createElement('div');placeholder.className='network-placeholder';placeholder.style.height=oldZone.height+'px';zone.before(placeholder);
   zone.classList.add('fullscreen');zone.setAttribute('role','dialog');zone.setAttribute('aria-modal','true');$('#close-network').hidden=false;$('#expand-network').setAttribute('aria-expanded','true');lockBackground(true);syncLock();
+  const to=rectOf(stage);to.home=to;to.r=0;
   graph?.expand(true,id);if(id)selectNode(id,false);
   if(animate){
-   const reveal=zone.animate([{clipPath:clipFor(oldStage)},{clipPath:fullClip}],{duration:720,easing:'cubic-bezier(.65,0,.15,1)'});
-   zone.querySelector('.network-stage').animate([{opacity:0},{opacity:1}],{duration:520,delay:180,easing:'ease-out',fill:'backwards'});
-   chrome(zone).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:420,delay:380+i*45,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
-   await reveal.finished;
+   zone.classList.add('is-morphing');
+   const bg=zone.animate([{backgroundColor:'rgba(16,23,34,0)'},{backgroundColor:'rgba(16,23,34,1)'}],{duration:520,easing:'ease-out'});
+   chrome(zone).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:460,delay:520+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+   await morph(stage,from,to,780);await bg.finished.catch(()=>{});
   }
-  $('#close-network').focus();
+  clearMorph(stage);zone.classList.remove('is-morphing');
+  $('#close-network').focus({preventScroll:true});
  }else{
-  graph?.expand(false);
+  const from=rectOf(stage);from.home=from;from.r=0;graph?.expand(false);
   if(animate){
-   await Promise.all([...chrome(zone),zone.querySelector('.network-stage')].map(el=>el.animate([{opacity:1},{opacity:0}],{duration:180,easing:'ease-out',fill:'forwards'}).finished));
-   const p=placeholder.getBoundingClientRect();
-   const target={left:p.left+stageOffset.x,top:p.top+stageOffset.y,right:p.left+stageOffset.x+stageOffset.w,bottom:p.top+stageOffset.y+stageOffset.h};
-   await zone.animate([{clipPath:fullClip},{clipPath:clipFor(target)}],{duration:560,easing:'cubic-bezier(.55,0,.25,1)',fill:'forwards'}).finished;
+   zone.classList.add('is-morphing');
+   await Promise.all(chrome(zone).map(el=>el.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(10px)'}],{duration:200,easing:'ease-in',fill:'forwards'}).finished.catch(()=>{})));
+   const p=placeholder.getBoundingClientRect(),to={x:p.left+stageOffset.x,y:p.top+stageOffset.y,w:stageOffset.w,h:stageOffset.h,r:10,home:from};
+   const bg=zone.animate([{backgroundColor:'rgba(16,23,34,1)'},{backgroundColor:'rgba(16,23,34,0)'}],{duration:650,delay:150,easing:'ease-in-out',fill:'forwards'});
+   await morph(stage,from,to,720);await bg.finished.catch(()=>{});
   }
-  zone.getAnimations({subtree:true}).forEach(a=>a.cancel());
+  zone.getAnimations({subtree:true}).forEach(a=>a.cancel());clearMorph(stage);zone.classList.remove('is-morphing');
   zone.classList.remove('fullscreen');zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus({preventScroll:true});
-  if(animate)zone.querySelector('.network-stage').animate([{opacity:0},{opacity:1}],{duration:420,easing:'ease-out'});
- }transitioning=false;
+ }
+ }finally{transitioning=false;}
 }
 $('#expand-network').addEventListener('click',()=>setFullscreen(!$('#network-zone').classList.contains('fullscreen')));$('#close-network').addEventListener('click',()=>setFullscreen(false));
 document.addEventListener('keydown',e=>{
@@ -111,7 +132,7 @@ document.addEventListener('keydown',e=>{
 function fallback(message){$('#network-fallback').textContent=message||'Explore every project and connection using the list below.';$('#network-fallback').hidden=false;$('#network-hint').hidden=true;$('#connection-browser').hidden=false;$('#browse-toggle').setAttribute('aria-expanded','true');['#pause-network','#zoom-in','#zoom-out'].forEach(s=>$(s).hidden=true);$('#node-labels').hidden=true;$('#network-canvas').hidden=true;}
 $('#network-canvas').addEventListener('network-unavailable',()=>fallback());
 if(new URLSearchParams(location.search).get('view')==='static')fallback('A lighter way to connect the dots. Browse all projects, skills and activities below.');
-else import('./network.js?v=13').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
+else import('./network.js?v=14').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
 
 const sections=[...document.querySelectorAll('main>section')];let currentSection=0;
 function updatePager(){const mid=innerHeight*.35;let i=0;sections.forEach((s,j)=>{if(s.getBoundingClientRect().top<=mid)i=j;});currentSection=i;$('#section-count').textContent=`${String(i+1).padStart(2,'0')} / ${String(sections.length).padStart(2,'0')}`;$('#section-previous').disabled=i===0;$('#section-next').disabled=i===sections.length-1;
@@ -120,3 +141,8 @@ function updatePager(){const mid=innerHeight*.35;let i=0;sections.forEach((s,j)=
 const sectionScroll=installSectionScroll({sections,header:$('.site-header'),reduced:motion,blocked:()=>dialog.open||$('#network-zone').classList.contains('fullscreen'),onChange:updatePager});
 $('#section-previous').addEventListener('click',()=>sectionScroll.moveTo(sections[Math.max(0,currentSection-1)]));$('#section-next').addEventListener('click',()=>sectionScroll.moveTo(sections[Math.min(sections.length-1,currentSection+1)]));
 let scheduled=false;addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;updatePager();});}},{passive:true});updatePager();reveal();
+
+installSearch({
+ openItem:(kind,id)=>({project:openProject,event:openEvent,certificate:openCertificate}[kind]?.(id)),
+ showInNetwork:id=>{if($('#network-zone').classList.contains('fullscreen'))selectNode(id);else setFullscreen(true,id);}
+});

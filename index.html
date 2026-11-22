@@ -8,15 +8,16 @@
   <meta property="og:title" content="Hannan Noor — Ideas into things">
   <meta property="og:description" content="Applied AI, creative development, and the connections between them.">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="revision.css"><link rel="stylesheet" href="direction.css?v=13">
+  <link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="revision.css"><link rel="stylesheet" href="direction.css?v=14">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
-  <script type="module" src="app.js?v=13"></script>
+  <script type="module" src="app.js?v=14"></script>
 </head>
 <body>
   <a class="skip-link" href="#work">Skip to selected work</a>
   <header class="site-header">
     <a href="#home" class="wordmark" aria-label="Hannan Noor home">hn<span class="wordmark-dot">.</span></a>
     <div class="header-note mono">A PORTFOLIO OF<br>THINGS & CONNECTIONS</div>
+    <button class="search-trigger" type="button" data-open-search aria-haspopup="dialog" aria-controls="site-search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="search-trigger-label">Search</span><kbd class="mono">/</kbd></button>
     <button class="menu-toggle mono" aria-expanded="false" aria-controls="navigation">MENU <span>+</span></button>
     <nav id="navigation" aria-label="Main navigation"><a href="#work">Work <sup id="project-total">16</sup></a><a href="#about">About</a><a href="#beyond">Community</a><a href="#certificates">Certificates</a><a class="nav-contact" href="#contact">Say hello <span>↗</span></a></nav>
   </header>
@@ -91,6 +92,14 @@
     <section class="credential-section section-wrap" id="certificates" tabindex="-1" aria-labelledby="certificate-title"><div class="section-top reveal"><span class="eyebrow mono">05 / CERTIFICATES & CONTINUED LEARNING</span><p>Learning, with<br>something to show for it.</p></div><h2 class="display reveal" id="certificate-title">Always<br><span class="indented">adding to it.</span></h2><div id="certificate-grid" class="certificate-grid"></div></section>
     <section class="contact section-wrap" id="contact" tabindex="-1" aria-labelledby="contact-title"><div class="contact-top mono"><span>06 / NEXT CONNECTION</span><span><span class="status-dot"></span> OPEN TO INTERNSHIPS</span></div><h2 id="contact-title" class="display reveal">Got an<br><span>interesting</span><br>problem<span class="contact-question">?</span></h2><div class="contact-bottom"><a class="contact-email" href="mailto:noorhannan125@gmail.com">Let’s talk about it <span>↗</span></a><p>AI, data, software, or something<br>that doesn’t fit neatly in a box.</p><div><a href="https://github.com/hannannoor" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/hannan-noor-875648361/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="assets/Hannan-Noor-CV.pdf" download>Résumé ↓</a></div></div></section>
   </main>
+  <div class="site-search" id="site-search" role="dialog" aria-modal="true" aria-labelledby="site-search-label" hidden>
+    <div class="search-box">
+      <label id="site-search-label" class="search-field"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="sr-only">Search projects, skills, community and certificates</span><input id="site-search-input" type="search" role="combobox" aria-expanded="true" aria-controls="site-search-results" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search projects, skills, activities…"><kbd class="mono">ESC</kbd></label>
+      <p class="search-status mono" id="site-search-status" aria-live="polite"></p>
+      <ul class="search-results" id="site-search-results" role="listbox" aria-label="Results"></ul>
+      <p class="search-help mono"><span>↑↓ move</span><span>↵ open</span><span>⇧↵ show in network</span></p>
+    </div>
+  </div>
   <nav class="section-pager" aria-label="Section navigation"><button id="section-previous" aria-label="Previous section">↑</button><span id="section-count" class="mono">01 / 06</span><button id="section-next" aria-label="Next section">↓</button></nav>
   <footer class="site-footer section-wrap"><span class="mono">© 2026 HANNAN NOOR</span><a href="credits.html" class="mono">COLOPHON & CREDITS ↗</a><a class="mono" href="#home">BACK TO TOP ↑</a></footer>
   <dialog id="project-dialog" aria-labelledby="dialog-title"><button id="close-project" class="dialog-close" aria-label="Close project">×</button><div id="dialog-content"></div></dialog>
