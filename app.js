@@ -85,6 +85,7 @@ async function setFullscreen(open,id){
   graph?.expand(true,id);if(id)selectNode(id,false);
   if(animate){
    const reveal=zone.animate([{clipPath:clipFor(oldStage)},{clipPath:fullClip}],{duration:720,easing:'cubic-bezier(.65,0,.15,1)'});
+   zone.querySelector('.network-stage').animate([{opacity:0},{opacity:1}],{duration:520,delay:180,easing:'ease-out',fill:'backwards'});
    chrome(zone).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:420,delay:380+i*45,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
    await reveal.finished;
   }
@@ -92,14 +93,14 @@ async function setFullscreen(open,id){
  }else{
   graph?.expand(false);
   if(animate){
-   await Promise.all([...chrome(zone)].map(el=>el.animate([{opacity:1},{opacity:0}],{duration:180,easing:'ease-out',fill:'forwards'}).finished));
+   await Promise.all([...chrome(zone),zone.querySelector('.network-stage')].map(el=>el.animate([{opacity:1},{opacity:0}],{duration:180,easing:'ease-out',fill:'forwards'}).finished));
    const p=placeholder.getBoundingClientRect();
    const target={left:p.left+stageOffset.x,top:p.top+stageOffset.y,right:p.left+stageOffset.x+stageOffset.w,bottom:p.top+stageOffset.y+stageOffset.h};
    await zone.animate([{clipPath:fullClip},{clipPath:clipFor(target)}],{duration:560,easing:'cubic-bezier(.55,0,.25,1)',fill:'forwards'}).finished;
   }
   zone.getAnimations({subtree:true}).forEach(a=>a.cancel());
   zone.classList.remove('fullscreen');zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus({preventScroll:true});
-  if(animate)zone.querySelector('.network-stage').animate([{opacity:.6},{opacity:1}],{duration:260,easing:'ease-out'});
+  if(animate)zone.querySelector('.network-stage').animate([{opacity:0},{opacity:1}],{duration:420,easing:'ease-out'});
  }transitioning=false;
 }
 $('#expand-network').addEventListener('click',()=>setFullscreen(!$('#network-zone').classList.contains('fullscreen')));$('#close-network').addEventListener('click',()=>setFullscreen(false));
