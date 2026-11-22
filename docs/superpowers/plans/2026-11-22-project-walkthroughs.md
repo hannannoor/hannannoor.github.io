@@ -12,6 +12,8 @@ Constraints: start from origin/main e943e0a; branch feat/project-walkthroughs. N
 - [x] Select useful screenshots, write precise explanations and public report links; record provenance.
 - [x] Extend gallery presentation and event links; add Streamlit and public CCA material; correct IITSC.
 - [x] Verify local assets, module imports, desktop/mobile dialogs and live app link. Review branch diff.
-- [ ] Push review branch, create draft PR, provide screenshot and review instructions. Leave main unchanged.
+- [x] Push review branch, create draft PR, provide screenshot and review instructions. Leave main unchanged.
+
+Review handoff: https://github.com/hannannoor/hannannoor.github.io/pull/1 (draft). Twelve existing checks passed; no important review findings remain. Main remained at e943e0a when the branch was pushed. Browser preview is served locally for Hannan’s review; no production deployment was requested or performed.
 
 Ruling: use the existing dialog architecture rather than a new case-study routing system; this matches the bounded request and keeps review focused. No new tests for static content; run existing applicable graph/module checks plus browser verification and asset validation.
