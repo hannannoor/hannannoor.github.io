@@ -1,6 +1,6 @@
 // "Network trail" cursor: the normal cursor stays, and moving it leaves a short-lived web
 // of nodes and links, like the neural network on the page. Links pulse, the cursor wires
-// itself to nearby nodes, clicking sends out a burst, and hover targets get a halo or label.
+// itself to nearby nodes, clicking sends out a burst, and hover targets get a label.
 // The canvas only animates while there is something to draw.
 export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
  const canvas=document.createElement('canvas'),label=document.createElement('div');
@@ -52,7 +52,7 @@ export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
 
  function frame(now){
   const dt=Math.min(.05,(now-lastT)/1000);lastT=now;
-  hx+=(mx-hx)*.28;hy+=(my-hy)*.28;halo+=((over==='link'&&inside?1:0)-halo)*.18;
+  hx+=(mx-hx)*.28;hy+=(my-hy)*.28;
   ctx.clearRect(0,0,W,H);
   nodes=nodes.filter(n=>now-n.born<n.life);
   pulses=pulses.filter(p=>p.t<1&&nodes.includes(p.a)&&nodes.includes(p.b));
@@ -74,10 +74,7 @@ export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
   for(const p of pulses){p.t+=dt*p.speed;const x=p.a.x+(p.b.x-p.a.x)*p.t,y=p.a.y+(p.b.y-p.a.y)*p.t,al=Math.sin(p.t*Math.PI)*Math.min(p.a.a,p.b.a);
    ctx.fillStyle=`rgba(255,255,255,${al})`;ctx.beginPath();ctx.arc(x,y,1.6,0,Math.PI*2);ctx.fill();
    ctx.fillStyle=`rgba(${col},${al*.35})`;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();}
-  // halo on links/buttons
-  if(halo>.02){ctx.strokeStyle=`rgba(${col},${halo*.9})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(hx,hy,8+halo*12,0,Math.PI*2);ctx.stroke();
-   ctx.fillStyle=`rgba(${col},${halo*.12})`;ctx.fill();}
   label.style.transform=`translate(${mx+18}px,${my+16}px)`;
-  if(nodes.length||pulses.length||halo>.02)requestAnimationFrame(frame);else{running=false;ctx.clearRect(0,0,W,H);}
+  if(nodes.length||pulses.length)requestAnimationFrame(frame);else{running=false;ctx.clearRect(0,0,W,H);}
  }
 }

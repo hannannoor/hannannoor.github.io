@@ -245,3 +245,15 @@ main>section,.site-footer{scroll-snap-align:none;scroll-snap-stop:normal}
 }
 .dialog-cover[data-project-cover=findr-mobile]{height:auto;padding:0;background:#d3e0f3}
 .dialog-cover[data-project-cover=findr-mobile] img{width:100%;height:auto;max-height:540px;padding:0;object-fit:contain;filter:none}
+
+/* Themed system cursors (mouse only): navy arrow with a blue node tip; blue + halo on links. */
+html.fx-themed-cursor,html.fx-themed-cursor body{
+ cursor:url(assets/cursors/arrow.png) 5 4,auto;
+ cursor:-webkit-image-set(url(assets/cursors/arrow.png) 1x,url(assets/cursors/arrow@2x.png) 2x) 5 4,auto;
+ cursor:image-set(url(assets/cursors/arrow.png) 1x,url(assets/cursors/arrow@2x.png) 2x) 5 4,auto}
+html.fx-themed-cursor :is(a,button,label,summary,select,[role=button],[role=option],.project-visual,.archive-row,.search-result){
+ cursor:url(assets/cursors/link.png) 7 6,pointer!important;
+ cursor:-webkit-image-set(url(assets/cursors/link.png) 1x,url(assets/cursors/link@2x.png) 2x) 7 6,pointer!important;
+ cursor:image-set(url(assets/cursors/link.png) 1x,url(assets/cursors/link@2x.png) 2x) 7 6,pointer!important}
+html.fx-themed-cursor :is(input,textarea,[contenteditable]){cursor:text!important}
+html.fx-themed-cursor :is(button:disabled,[aria-disabled=true]){cursor:not-allowed!important}

@@ -121,6 +121,7 @@ function installDialogMotion(){
 
 export function installFx({header}){
  document.documentElement.classList.add('fx');
+ if(finePointer.matches)document.documentElement.classList.add('fx-themed-cursor');
  installProgress();installHeadings();
  if(reduced.matches)return;
  installCurtain({header});installDialogMotion();
