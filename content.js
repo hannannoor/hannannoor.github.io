@@ -612,5 +612,7 @@ export const edges=[...skillDefinitions.map(([id])=>['hannan',id]),...projects.f
 export function relatedNodes(id){const set=new Set([id]);for(const[a,b]of edges){if(a===id)set.add(b);if(b===id)set.add(a);}return set;}
 export function shortestPath(start,end){if(!nodes.some(n=>n.id===start)||!nodes.some(n=>n.id===end))return [];const q=[[start]],seen=new Set([start]);while(q.length){const path=q.shift(),tail=path.at(-1);if(tail===end)return path;for(const id of relatedNodes(tail))if(!seen.has(id)){seen.add(id);q.push([...path,id]);}}return [];}
 // Designed cover thumbnails for cards and list rows; dialogs keep the original screenshots.
-const projectThumbs={'supplyr':'supplyr','food-ordering-system':'food-ordering','transport-fare-calculator':'transport-fare','dsag-queues':'dsag-queues','network-design':'network-design','cloud-services-case-study':'cloud-services','windows-security-lab':'windows-security','restaurant-data-analytics':'restaurant-analytics'};
+const projectThumbs={'findr-mobile':'findr-mobile','supplyr':'supplyr','food-ordering-system':'food-ordering','transport-fare-calculator':'transport-fare','dsag-queues':'dsag-queues','network-design':'network-design','cloud-services-case-study':'cloud-services','windows-security-lab':'windows-security','restaurant-data-analytics':'restaurant-analytics'};
 for(const p of projects){if(projectThumbs[p.id])p.thumb=`assets/thumbs/${projectThumbs[p.id]}.webp`;}
+// Pop-up cover: the original portrait screenshot is too small at dialog width.
+{const fm=projects.find(p=>p.id==='findr-mobile');if(fm)fm.cover='assets/thumbs/findr-mobile.webp';}

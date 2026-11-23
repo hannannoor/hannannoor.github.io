@@ -1,7 +1,7 @@
 // Site-wide search across projects, skills, community activities and certificates.
 // Open with the header button, "/" or Ctrl/Cmd+K. Enter opens the result; "Show in network"
 // flies the 3D explorer to it.
-import {projects,events,certificates,nodes} from './content.js?v=14';
+import {projects,events,certificates,nodes} from './content.js?v=15';
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[’']/g,"'");

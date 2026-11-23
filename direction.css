@@ -145,7 +145,7 @@ main>section,.site-footer{scroll-snap-align:none;scroll-snap-stop:normal}
 
 /* Explorer morph: panels sit under the moving canvas; the canvas stays crisp. */
 .network-zone.is-morphing{overflow:hidden}
-.network-zone.is-morphing .network-stage{box-shadow:0 30px 80px -20px #0009;overflow:hidden}
+.network-zone.is-morphing .network-stage{position:relative;z-index:3;will-change:transform,clip-path;transform-origin:50% 50%}
 
 /* Site search */
 .search-trigger{display:inline-flex;align-items:center;gap:9px;margin-left:28px;padding:9px 12px 9px 11px;border:1px solid #c3cfdf;border-radius:999px;font-size:14px;font-weight:500;color:#15243b;background:#fff8;transition:border-color .2s,background .2s,box-shadow .2s}
@@ -186,3 +186,74 @@ main>section,.site-footer{scroll-snap-align:none;scroll-snap-stop:normal}
  .search-help{display:none}.search-network{opacity:1;border-color:#d3dcea;background:#fff;width:36px;height:36px;padding:0;font-size:0;border-radius:50%;display:grid;place-items:center}.search-network:before{content:'✳';font-size:16px}.search-main img,.search-glyph{width:46px;height:36px}
 }
 @media(prefers-reduced-motion:reduce){.site-search,.search-box{transition:none}}
+
+/* ================= Site-wide motion (fx.js) ================= */
+/* Cursor */
+.fx-has-cursor.fx-cursor-on,.fx-has-cursor.fx-cursor-on *{cursor:none!important}
+.fx-has-cursor.fx-cursor-on input,.fx-has-cursor.fx-cursor-on textarea,.fx-has-cursor.fx-cursor-on [contenteditable]{cursor:text!important}
+.fx-cursor-dot,.fx-cursor-ring{position:fixed;left:0;top:0;z-index:1000;pointer-events:none;opacity:0;transition:opacity .25s}
+.fx-cursor-on .fx-cursor-dot,.fx-cursor-on .fx-cursor-ring{opacity:1}
+.fx-cursor-dot{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#245aff;mix-blend-mode:normal}
+.fx-cursor-ring{width:0;height:0}
+.fx-cursor-ring:before{content:'';position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:50%;border:1.5px solid #245aff8c;transition:transform .35s cubic-bezier(.2,.9,.25,1),background .25s,border-color .25s,opacity .2s}
+.fx-cursor-ring[data-state=link]:before{transform:scale(1.55);background:#245aff1f;border-color:#245aff}
+.fx-cursor-ring[data-state=text]:before{transform:scale(.4);opacity:0}
+.fx-cursor-ring[data-state=label]:before{transform:scale(2.5);background:#245aff;border-color:#245aff}
+.fx-cursor-ring.down:before{transform:scale(.8)}
+.fx-cursor-ring[data-state=label].down:before{transform:scale(2.2)}
+.fx-cursor-label{position:absolute;left:0;top:0;transform:translate(-50%,-50%) scale(.6);color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:0;transition:opacity .2s,transform .35s cubic-bezier(.2,.9,.25,1);white-space:nowrap}
+.fx-cursor-ring[data-state=label] .fx-cursor-label{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.fx-cursor-ring[data-state=text]~.fx-cursor-dot,.fx-has-cursor .fx-cursor-ring[data-state=label]+.fx-cursor-dot{opacity:0}
+/* Curtain + intro */
+.fx-curtain,.fx-intro{position:fixed;inset:0;z-index:900;background:#245aff;color:#fff;display:none;transform:translateY(100%);pointer-events:none}
+.fx-curtain.active{display:grid;place-items:center}
+.fx-curtain-inner{display:flex;flex-direction:column;align-items:center;gap:14px}
+.fx-curtain-index{font-size:12px;letter-spacing:.2em;opacity:.75}
+.fx-curtain-title{font:400 clamp(48px,9vw,140px)/1 var(--display);letter-spacing:-.055em;animation:fx-title-in .7s cubic-bezier(.2,.9,.25,1) both .12s}
+@keyframes fx-title-in{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.fx-intro{display:grid;place-items:center;transform:none;background:#0f1626;align-content:center;gap:28px}
+.fx-intro-mark{font:400 clamp(72px,12vw,160px)/1 var(--display);letter-spacing:-.08em;animation:fx-title-in .8s cubic-bezier(.2,.9,.25,1) both}
+.fx-intro-mark b{font-weight:inherit;color:#245aff}
+.fx-intro-bar{display:block;width:160px;height:2px;background:#ffffff26;overflow:hidden;justify-self:center}
+.fx-intro-bar i{display:block;height:100%;background:#245aff;transform-origin:left;animation:fx-load .85s cubic-bezier(.65,0,.35,1) both}
+@keyframes fx-load{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* Scroll progress */
+.fx-progress{position:fixed;left:0;top:0;right:0;height:3px;z-index:150;background:linear-gradient(90deg,#245aff,#6f95ff);transform-origin:left;transform:scaleX(0);pointer-events:none}
+/* Heading words */
+.fx-split .fx-word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.fx-split .fx-word-inner{display:inline-block;transform:translateY(105%);transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.fx-split.fx-in .fx-word-inner{transform:none}
+/* Magnetic */
+.fx-magnet{transition:transform .25s cubic-bezier(.2,.9,.25,1)!important}
+.text-link,.search-trigger,.nav-contact,.section-pager button,.dialog-links a{transition:transform .5s cubic-bezier(.2,.9,.25,1)}
+/* Card tilt + light */
+.fx .project-visual{transform:perspective(900px) rotateX(var(--fx-rx,0deg)) rotateY(var(--fx-ry,0deg));transition:transform .6s cubic-bezier(.2,.9,.25,1),box-shadow .4s;will-change:transform}
+.fx .project-visual.fx-tilting{transition:transform .12s linear,box-shadow .4s;box-shadow:0 30px 60px -28px #0f162688}
+.fx .project-visual:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle at var(--fx-lx,50%) var(--fx-ly,50%),#ffffff38,transparent 55%);opacity:0;transition:opacity .3s}
+.fx .project-visual.fx-tilting:after{opacity:1}
+/* Images wipe in with their cards */
+.fx .project-card.reveal .project-visual img{clip-path:inset(0 0 100% 0);transform:scale(1.12);transition:clip-path 1.1s cubic-bezier(.76,0,.24,1) .1s,transform 1.4s cubic-bezier(.16,1,.3,1) .1s}
+.fx .project-card.reveal.visible .project-visual img{clip-path:inset(0 0 0 0);transform:none}
+.fx .project-card.reveal.visible .project-visual:hover img[src*="assets/thumbs/"]{transform:scale(1.04)}
+/* Archive rows slide their arrow */
+.archive-row{transition:background .3s,padding .3s}
+/* Dialog in/out */
+.fx dialog[open]{animation:fx-dialog-in .55s cubic-bezier(.16,1,.3,1)}
+.fx dialog[open]::backdrop{animation:fx-fade .4s ease both}
+.fx dialog.fx-closing{animation:fx-dialog-out .26s cubic-bezier(.7,0,.84,0) forwards}
+.fx dialog.fx-closing::backdrop{animation:fx-fade .26s ease reverse forwards}
+.fx dialog[open] .dialog-cover img{animation:fx-cover .9s cubic-bezier(.16,1,.3,1) both}
+.fx dialog[open] .dialog-body>*{animation:fx-rise .6s cubic-bezier(.16,1,.3,1) both}
+.fx dialog[open] .dialog-body>*:nth-child(2){animation-delay:.05s}.fx dialog[open] .dialog-body>*:nth-child(3){animation-delay:.1s}.fx dialog[open] .dialog-body>*:nth-child(4){animation-delay:.15s}.fx dialog[open] .dialog-body>*:nth-child(n+5){animation-delay:.2s}
+@keyframes fx-dialog-in{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes fx-dialog-out{to{opacity:0;transform:translateY(24px) scale(.98)}}
+@keyframes fx-fade{from{opacity:0}to{opacity:1}}
+@keyframes fx-cover{from{clip-path:inset(0 0 100% 0);transform:scale(1.08)}to{clip-path:inset(0);transform:none}}
+@keyframes fx-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+ .fx-split .fx-word-inner,.fx .project-card.reveal .project-visual img{transform:none!important;clip-path:none!important;transition:none!important}
+ .fx dialog[open],.fx dialog[open] *,.fx dialog[open]::backdrop{animation:none!important}
+ .fx .project-visual{transform:none!important}
+}
+.dialog-cover[data-project-cover=findr-mobile]{height:auto;padding:0;background:#d3e0f3}
+.dialog-cover[data-project-cover=findr-mobile] img{width:100%;height:auto;max-height:540px;padding:0;object-fit:contain;filter:none}

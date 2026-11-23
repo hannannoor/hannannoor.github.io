@@ -1,6 +1,7 @@
-import {installSectionScroll} from './section-scroll.js?v=14';
-import {installSearch} from './search.js?v=14';
-import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=14';
+import {installSectionScroll} from './section-scroll.js?v=15';
+import {installSearch} from './search.js?v=15';
+import {installFx} from './fx.js?v=15';
+import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=15';
 const $=s=>document.querySelector(s),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external='target="_blank" rel="noopener noreferrer"',motion=matchMedia('(prefers-reduced-motion: reduce)');
 document.body.classList.add('js-ready');
@@ -27,7 +28,7 @@ $('#project-collections').innerHTML=collections.map(c=>`<a href="${c.url}" ${ext
 const dialog=$('#project-dialog');let lastFocus=null;
 function syncLock(){document.body.classList.toggle('body-locked',dialog.open||$('#network-zone').classList.contains('fullscreen'));}
 function showDialog(content){lastFocus=document.activeElement;$('#dialog-content').innerHTML=content;if(!dialog.open)dialog.showModal();dialog.scrollTop=0;syncLock();$('#close-project').focus();}
-function openProject(id){const p=projects.find(p=>p.id===id);if(!p)return;showDialog(`<div class="dialog-cover" data-project-cover="${p.id}"><img src="${p.image}" alt="${escape(p.imageAlt)}"></div><div class="dialog-body"><span class="mono">${p.number} / ${p.kind.toUpperCase()}${p.year?' / '+p.year:''}</span><h2 id="dialog-title">${p.name}</h2><p class="dialog-lead">${p.brief}</p>${p.demo?`<div class="case-study-actions"><a href="${p.demo}" ${external}>${p.demoLabel||'Watch demonstration'}</a></div>`:''}<div class="dialog-columns"><div><div><h3>FOCUS</h3><p>${p.role}</p></div><div><h3>BUILT WITH</h3><p>${p.stack.join('<br>')}</p></div></div><div><h3>INSIDE THE PROJECT</h3><ul>${p.details.map(t=>`<li>${t}</li>`).join('')}</ul></div></div>${p.gallery?.length?'<div class="walkthrough-heading"><h3>INSIDE THE EXPERIENCE</h3><p>Explore the screens and decisions behind the project. Select an image to view it at full size.</p></div>':''}${gallery(p.gallery,'project-gallery')}<p class="dialog-note">${p.note}</p><div class="dialog-links"><a href="${p.repo}" ${external}>Explore the source ↗</a>${p.demo?`<a href="${p.demo}" ${external}>${p.demoLabel||'Watch demonstration'} ↗</a>`:''}${[...(p.relatedRepos||[]),...(p.relatedLinks||[])].map(r=>`<a href="${r.url}" ${external}>${r.name} ↗</a>`).join('')}</div></div>`);}
+function openProject(id){const p=projects.find(p=>p.id===id);if(!p)return;showDialog(`<div class="dialog-cover" data-project-cover="${p.id}"><img src="${p.cover||p.image}" alt="${escape(p.imageAlt)}"></div><div class="dialog-body"><span class="mono">${p.number} / ${p.kind.toUpperCase()}${p.year?' / '+p.year:''}</span><h2 id="dialog-title">${p.name}</h2><p class="dialog-lead">${p.brief}</p>${p.demo?`<div class="case-study-actions"><a href="${p.demo}" ${external}>${p.demoLabel||'Watch demonstration'}</a></div>`:''}<div class="dialog-columns"><div><div><h3>FOCUS</h3><p>${p.role}</p></div><div><h3>BUILT WITH</h3><p>${p.stack.join('<br>')}</p></div></div><div><h3>INSIDE THE PROJECT</h3><ul>${p.details.map(t=>`<li>${t}</li>`).join('')}</ul></div></div>${p.gallery?.length?'<div class="walkthrough-heading"><h3>INSIDE THE EXPERIENCE</h3><p>Explore the screens and decisions behind the project. Select an image to view it at full size.</p></div>':''}${gallery(p.gallery,'project-gallery')}<p class="dialog-note">${p.note}</p><div class="dialog-links"><a href="${p.repo}" ${external}>Explore the source ↗</a>${p.demo?`<a href="${p.demo}" ${external}>${p.demoLabel||'Watch demonstration'} ↗</a>`:''}${[...(p.relatedRepos||[]),...(p.relatedLinks||[])].map(r=>`<a href="${r.url}" ${external}>${r.name} ↗</a>`).join('')}</div></div>`);}
 function gallery(items,className='event-gallery'){
  return items?.length?`<div class="${className}">${items.map(i=>{
   const label=i.title||i.caption;
@@ -70,26 +71,19 @@ $('#zoom-in').addEventListener('click',()=>graph?.zoom(.88));$('#zoom-out').addE
 
 let fullscreenFocus=null,placeholder=null,transitioning=false,stageOffset=null;
 function lockBackground(value){document.querySelectorAll('.skip-link,.site-header,.hero-copy,.hero-kicker,.hero-rule,main>section:not(.hero),.site-footer,.section-pager').forEach(el=>el.inert=value);}
-// Morph: the live 3D canvas itself grows from its place on the page to its full-screen spot
-// (and back). Its real size changes every frame and the graph re-renders at that size,
-// so nothing is ever stretched. The dark backdrop and the panels fade around it.
-const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+// Morph: the 3D canvas renders once at its full-screen size; the move is done with a
+// uniform scale + translate + crop, which the GPU composites without re-rendering, so it
+// stays smooth. A uniform scale never stretches anything.
 const rectOf=el=>{const r=el.getBoundingClientRect();return {x:r.left,y:r.top,w:r.width,h:r.height};};
 const chrome=zone=>[...zone.querySelectorAll('.network-heading,.network-toolbar,.network-detail,.connection-browser:not([hidden]),.close-network')];
-function morph(stage,from,to,duration){
- // The stage keeps its grid cell; an explicit size + translate place it anywhere in between.
- const home=to.home;stage.style.willChange='transform';stage.style.position='relative';stage.style.zIndex='3';
- return new Promise(done=>{const start=performance.now();
-  (function frame(now){const t=Math.min(1,(now-start)/duration),k=ease(t);
-   const x=from.x+(to.x-from.x)*k,y=from.y+(to.y-from.y)*k,w=from.w+(to.w-from.w)*k,h=from.h+(to.h-from.h)*k;
-   stage.style.width=w+'px';stage.style.height=h+'px';stage.style.minHeight='0';stage.style.maxHeight='none';stage.style.flexShrink='0';
-   stage.style.transform=`translate(${x-home.x}px,${y-home.y}px)`;stage.style.borderRadius=`${from.r+(to.r-from.r)*k}px`;
-   graph?.renderNow?graph.renderNow():graph?.resize(false);
-   if(t<1)requestAnimationFrame(frame);else done();
-  })(start);
- });
+// Pose that makes the full-size stage F look exactly like the small rect A.
+function poseFor(A,F,r){
+ const s=Math.min(A.w/F.w,A.h/F.h)>0?A.h/F.h:1,vw=A.w/s,vh=A.h/s;
+ const ix=Math.max(0,(F.w-vw)/2),iy=Math.max(0,(F.h-vh)/2);
+ const dx=(A.x+A.w/2)-(F.x+F.w/2),dy=(A.y+A.h/2)-(F.y+F.h/2);
+ return {transform:`translate(${dx}px,${dy}px) scale(${s})`,clipPath:`inset(${iy}px ${ix}px ${iy}px ${ix}px round ${r/s}px)`};
 }
-function clearMorph(stage){['width','height','minHeight','maxHeight','flexShrink','transform','borderRadius','position','zIndex','willChange'].forEach(k=>stage.style[k]='');graph?.resize(false);}
+const restPose={transform:'translate(0px,0px) scale(1)',clipPath:'inset(0px 0px 0px 0px round 0px)'};
 async function setFullscreen(open,id){
  const zone=$('#network-zone'),stage=zone.querySelector('.network-stage');
  if(transitioning||open===zone.classList.contains('fullscreen')){if(id)selectNode(id);return;}transitioning=true;
@@ -100,26 +94,26 @@ async function setFullscreen(open,id){
   stageOffset={x:from.x-oldZone.left,y:from.y-oldZone.top,w:from.w,h:from.h};from.r=10;
   fullscreenFocus=document.activeElement;placeholder=document.createElement('div');placeholder.className='network-placeholder';placeholder.style.height=oldZone.height+'px';zone.before(placeholder);
   zone.classList.add('fullscreen');zone.setAttribute('role','dialog');zone.setAttribute('aria-modal','true');$('#close-network').hidden=false;$('#expand-network').setAttribute('aria-expanded','true');lockBackground(true);syncLock();
-  const to=rectOf(stage);to.home=to;to.r=0;
+  const to=rectOf(stage);
   graph?.expand(true,id);if(id)selectNode(id,false);
   if(animate){
    zone.classList.add('is-morphing');
    const bg=zone.animate([{backgroundColor:'rgba(16,23,34,0)'},{backgroundColor:'rgba(16,23,34,1)'}],{duration:520,easing:'ease-out'});
-   chrome(zone).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:460,delay:520+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
-   await morph(stage,from,to,780);await bg.finished.catch(()=>{});
+   chrome(zone).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:460,delay:480+i*55,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+   await stage.animate([poseFor(from,to,10),restPose],{duration:760,easing:'cubic-bezier(.65,0,.2,1)'}).finished.catch(()=>{});await bg.finished.catch(()=>{});
   }
-  clearMorph(stage);zone.classList.remove('is-morphing');
+  zone.classList.remove('is-morphing');
   $('#close-network').focus({preventScroll:true});
  }else{
-  const from=rectOf(stage);from.home=from;from.r=0;graph?.expand(false);
+  const from=rectOf(stage);graph?.expand(false);
   if(animate){
    zone.classList.add('is-morphing');
    await Promise.all(chrome(zone).map(el=>el.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(10px)'}],{duration:200,easing:'ease-in',fill:'forwards'}).finished.catch(()=>{})));
-   const p=placeholder.getBoundingClientRect(),to={x:p.left+stageOffset.x,y:p.top+stageOffset.y,w:stageOffset.w,h:stageOffset.h,r:10,home:from};
-   const bg=zone.animate([{backgroundColor:'rgba(16,23,34,1)'},{backgroundColor:'rgba(16,23,34,0)'}],{duration:650,delay:150,easing:'ease-in-out',fill:'forwards'});
-   await morph(stage,from,to,720);await bg.finished.catch(()=>{});
+   const p=placeholder.getBoundingClientRect(),to={x:p.left+stageOffset.x,y:p.top+stageOffset.y,w:stageOffset.w,h:stageOffset.h};
+   const bg=zone.animate([{backgroundColor:'rgba(16,23,34,1)'},{backgroundColor:'rgba(16,23,34,0)'}],{duration:620,delay:120,easing:'ease-in-out',fill:'forwards'});
+   await stage.animate([restPose,poseFor(to,from,10)],{duration:700,easing:'cubic-bezier(.65,0,.2,1)',fill:'forwards'}).finished.catch(()=>{});await bg.finished.catch(()=>{});
   }
-  zone.getAnimations({subtree:true}).forEach(a=>a.cancel());clearMorph(stage);zone.classList.remove('is-morphing');
+  zone.getAnimations({subtree:true}).forEach(a=>a.cancel());zone.classList.remove('is-morphing');
   zone.classList.remove('fullscreen');zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus({preventScroll:true});
  }
  }finally{transitioning=false;}
@@ -132,7 +126,7 @@ document.addEventListener('keydown',e=>{
 function fallback(message){$('#network-fallback').textContent=message||'Explore every project and connection using the list below.';$('#network-fallback').hidden=false;$('#network-hint').hidden=true;$('#connection-browser').hidden=false;$('#browse-toggle').setAttribute('aria-expanded','true');['#pause-network','#zoom-in','#zoom-out'].forEach(s=>$(s).hidden=true);$('#node-labels').hidden=true;$('#network-canvas').hidden=true;}
 $('#network-canvas').addEventListener('network-unavailable',()=>fallback());
 if(new URLSearchParams(location.search).get('view')==='static')fallback('A lighter way to connect the dots. Browse all projects, skills and activities below.');
-else import('./network.js?v=14').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
+else import('./network.js?v=15').then(async({createNetwork})=>{graph=await createNetwork($('#network-canvas'),$('#node-labels'),id=>{if(!$('#network-zone').classList.contains('fullscreen'))setFullscreen(true,id);else selectNode(id);});graph.pause($('#pause-network').getAttribute('aria-pressed')==='true');if($('#network-zone').classList.contains('fullscreen'))graph.expand(true,selectedNode);else if(selectedNode!=='hannan')graph.select(selectedNode,false);}).catch(e=>{console.warn('Network unavailable:',e.message);fallback();});
 
 const sections=[...document.querySelectorAll('main>section')];let currentSection=0;
 function updatePager(){const mid=innerHeight*.35;let i=0;sections.forEach((s,j)=>{if(s.getBoundingClientRect().top<=mid)i=j;});currentSection=i;$('#section-count').textContent=`${String(i+1).padStart(2,'0')} / ${String(sections.length).padStart(2,'0')}`;$('#section-previous').disabled=i===0;$('#section-next').disabled=i===sections.length-1;
@@ -146,3 +140,5 @@ installSearch({
  openItem:(kind,id)=>({project:openProject,event:openEvent,certificate:openCertificate}[kind]?.(id)),
  showInNetwork:id=>{if($('#network-zone').classList.contains('fullscreen'))selectNode(id);else setFullscreen(true,id);}
 });
+
+installFx({header:document.querySelector('.site-header')});
