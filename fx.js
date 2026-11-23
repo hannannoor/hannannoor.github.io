@@ -3,35 +3,7 @@
 // visitor prefers reduced motion, and pointer effects only run with a real mouse.
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
-const lerp=(a,b,t)=>a+(b-a)*t;
-
-/* ---------- Cursor ---------- */
-function installCursor(){
- const dot=document.createElement('div'),ring=document.createElement('div');
- dot.className='fx-cursor-dot';ring.className='fx-cursor-ring';ring.innerHTML='<span class="fx-cursor-label mono"></span>';
- document.body.append(ring,dot);document.documentElement.classList.add('fx-has-cursor');
- const label=ring.firstChild;
- let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my,shown=false,state='';
- const setState=(s,text='')=>{if(s===state&&label.textContent===text)return;state=s;ring.dataset.state=s;label.textContent=text;};
- addEventListener('pointermove',e=>{
-  if(e.pointerType!=='mouse')return;mx=e.clientX;my=e.clientY;
-  if(!shown){shown=true;rx=mx;ry=my;document.documentElement.classList.add('fx-cursor-on');}
-  const t=e.target;
-  if(t.closest?.('input,textarea,select,[contenteditable]'))setState('text');
-  else if(t.closest?.('#network-canvas'))setState('label','Drag');
-  else if(t.closest?.('.project-visual,.archive-row,.gallery-item,.event-card,.certificate-card'))setState('label','View');
-  else if(t.closest?.('a,button,label,summary,[role=button]'))setState('link');
-  else setState('');
- },{passive:true});
- document.addEventListener('pointerleave',()=>{shown=false;document.documentElement.classList.remove('fx-cursor-on');});
- addEventListener('pointerdown',()=>ring.classList.add('down'),{passive:true});
- addEventListener('pointerup',()=>ring.classList.remove('down'),{passive:true});
- (function frame(){
-  rx=lerp(rx,mx,.2);ry=lerp(ry,my,.2);
-  dot.style.transform=`translate(${mx}px,${my}px)`;ring.style.transform=`translate(${rx}px,${ry}px)`;
-  requestAnimationFrame(frame);
- })();
-}
+import {installCursorTrail} from './cursor-trail.js?v=16';
 
 /* ---------- Section transitions ---------- */
 function installCurtain({header}){
@@ -152,5 +124,11 @@ export function installFx({header}){
  installProgress();installHeadings();
  if(reduced.matches)return;
  installCurtain({header});installDialogMotion();
- if(finePointer.matches){installCursor();installMagnetic();installTilt();}
+ if(finePointer.matches){
+  installCursorTrail({
+   isLink:t=>!!t.closest?.('a,button,label,summary,[role=button]')&&!t.closest('.project-visual'),
+   labelFor:t=>t.closest?.('#network-canvas')?'Drag to explore':t.closest?.('.project-visual,.archive-row')?'View project':t.closest?.('.event-card,.certificate-card,.gallery-item')?'Open':''
+  });
+  installMagnetic();installTilt();
+ }
 }
