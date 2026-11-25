@@ -3,7 +3,7 @@
 // visitor prefers reduced motion, and pointer effects only run with a real mouse.
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
-import {installCursorTrail} from './cursor-trail.js?v=16';
+import {installCursorTrail} from './cursor-trail.js?v=17';
 
 /* ---------- Section transitions ---------- */
 function installCurtain({header}){

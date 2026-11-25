@@ -10,7 +10,7 @@ export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
  const BLUE='36,90,255',SOFT='140,172,255';
  const LIFE=1100,SPACING=24,LINK=95,HEAD_LINK=120,MAX=46;
  let dpr=1,W=0,H=0,nodes=[],pulses=[],mx=-999,my=-999,hx=-999,hy=-999,lastX=null,lastY=null,
-  over='',halo=0,running=false,inside=false,dark=false,lastT=performance.now();
+  over='',halo=0,dragging=false,downX=0,downY=0,running=false,inside=false,dark=false,lastT=performance.now();
 
  function resize(){dpr=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
  resize();addEventListener('resize',resize);
@@ -28,6 +28,7 @@ export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
   const text=labelFor(t);label.textContent=text;label.classList.toggle('on',!!text);
   // Light text on dark areas, accent on light ones.
   dark=!!t.closest?.('.hero,.network-zone.fullscreen,.site-footer,.fx-dark');
+  if(dragging){lastX=mx;lastY=my;return;}
   if(lastX===null){lastX=mx;lastY=my;}
   const dx=mx-lastX,dy=my-lastY,dist=Math.hypot(dx,dy);
   if(dist>SPACING){
@@ -42,12 +43,22 @@ export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
   start();
  },{passive:true});
  document.addEventListener('pointerleave',()=>{inside=false;lastX=null;label.classList.remove('on');});
+ // Holding the button (dragging the network, selecting text...) pauses the trail and
+ // fades what is on screen; a plain click (little movement) still sends out a burst.
  addEventListener('pointerdown',e=>{
-  if(e.pointerType!=='mouse')return;
+  if(e.pointerType!=='mouse'||e.button!==0)return;
+  dragging=true;downX=e.clientX;downY=e.clientY;
+  const now=performance.now();for(const n of nodes){const left=n.life-(now-n.born);if(left>220)n.life-=left-220;}
+  start();
+ },{passive:true});
+ addEventListener('pointerup',e=>{
+  if(e.pointerType!=='mouse'||!dragging)return;dragging=false;lastX=null;
+  if(Math.hypot(e.clientX-downX,e.clientY-downY)>6)return;
   for(let i=0;i<10;i++){const a=i/10*Math.PI*2+Math.random()*.3,s=90+Math.random()*90;spawn(e.clientX,e.clientY,Math.cos(a)*s,Math.sin(a)*s,800,true);}
   const ring=nodes.slice(-10);ring.forEach((n,i)=>pulses.push({a:ring[i],b:ring[(i+1)%ring.length],t:0,speed:2.4}));
   start();
  },{passive:true});
+ addEventListener('blur',()=>{dragging=false;});
  addEventListener('scroll',()=>{lastX=null;},{passive:true});
 
  function frame(now){
@@ -66,7 +77,7 @@ export function installCursorTrail({labelFor=()=>'',isLink=()=>false}={}){
    ctx.strokeStyle=`rgba(${col},${(1-d/LINK)*Math.min(a.a,b.a)*(dark?.75:.55)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
   }
   // cursor wired to nearby nodes
-  if(inside)for(const n of nodes){const d=Math.hypot(n.x-hx,n.y-hy);if(d>HEAD_LINK||d<4)continue;
+  if(inside&&!dragging)for(const n of nodes){const d=Math.hypot(n.x-hx,n.y-hy);if(d>HEAD_LINK||d<4)continue;
    ctx.strokeStyle=`rgba(${col},${(1-d/HEAD_LINK)*n.a*.7})`;ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(n.x,n.y);ctx.stroke();}
   // nodes
   for(const n of nodes){ctx.fillStyle=`rgba(${col},${n.a*.9})`;ctx.beginPath();ctx.arc(n.x,n.y,n.r*(.6+.4*n.a),0,Math.PI*2);ctx.fill();}
