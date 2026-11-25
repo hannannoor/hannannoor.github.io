@@ -117,8 +117,8 @@ function parallax(){
 
 /* ---------- Hero name: scramble in, then a light sweep ---------- */
 function heroName(){
- const parts=[...document.querySelectorAll('#hero-name .name-line>span')];
- parts[0]?.classList.add('lab-shine');parts[1]?.classList.add('lab-glow-text');
+ const parts=[...document.querySelectorAll('#hero-name .lab3d-face .name-line>span, #hero-name:not(.lab3d) .name-line>span')];
+ parts[0]?.classList.add('lab-shine');
  if(reduced)return;
  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&@';
  parts.forEach((span,i)=>{
@@ -130,8 +130,43 @@ function heroName(){
  });
 }
 
+/* ---------- 3D name that turns to look at the mouse ---------- */
+// The real heading text stays the front face. Copies of it are stacked behind it in 3D
+// to give the letters depth; the whole block tilts toward the pointer.
+function hero3d(){
+ const h1=document.getElementById('hero-name');if(!h1)return;
+ const face=document.createElement('span');face.className='lab3d-face';face.append(...h1.childNodes);h1.append(face);
+ h1.classList.add('lab3d');
+ const DEPTH=18,layers=[];
+ for(let i=1;i<=DEPTH;i++){
+  const l=face.cloneNode(true);l.className='lab3d-layer';l.setAttribute('aria-hidden','true');
+  l.querySelectorAll('[class]').forEach(el=>el.classList.remove('lab-shine'));
+  // Draw the copies' letters with CSS so the name isn't repeated in the page text.
+  const texts=[];const w=document.createTreeWalker(l,NodeFilter.SHOW_TEXT);while(w.nextNode())texts.push(w.currentNode);
+  texts.forEach(t=>{if(!t.textContent.trim())return;const g=document.createElement('i');g.className='lab3d-t';g.dataset.t=t.textContent;t.replaceWith(g);});
+  l.style.setProperty('--z',(-i*1.6)+'px');l.style.setProperty('--k',(i/DEPTH).toFixed(3));
+  h1.insertBefore(l,face);layers.push(l);
+ }
+ // Copies take the final text, so let them appear once the name has finished scrambling in.
+ setTimeout(()=>h1.classList.add('lab3d-ready'),reduced?0:1300);
+ if(reduced)return;
+ let tx=0,ty=0,rx=0,ry=0,raf=0;
+ const loop=()=>{rx+=(tx-rx)*.08;ry+=(ty-ry)*.08;
+  h1.style.transform=`rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+  raf=Math.abs(tx-rx)+Math.abs(ty-ry)>.02?requestAnimationFrame(loop):0;};
+ const aim=(x,y)=>{const r=h1.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  ty=Math.max(-28,Math.min(28,(x-cx)/innerWidth*55));tx=Math.max(-22,Math.min(22,-(y-cy)/innerHeight*45));
+  if(!raf)raf=requestAnimationFrame(loop);};
+ if(fine)addEventListener('pointermove',e=>{if(e.pointerType==='mouse')aim(e.clientX,e.clientY);},{passive:true});
+ else{ // touch: a slow sway so phones still see the depth
+  const t0=performance.now();(function sway(now){const t=(now-t0)/1000;tx=Math.sin(t*.7)*8;ty=Math.sin(t*.5)*16;rx=tx;ry=ty;
+   h1.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;requestAnimationFrame(sway);})(t0);
+ }
+ aim(innerWidth*.7,innerHeight*.45);
+}
+
 export function installLab(){
  document.documentElement.classList.add('lab');
- background();heroName();tickers();numbers();glow();floatPreview();counters();parallax();
+ background();hero3d();heroName();tickers();numbers();glow();floatPreview();counters();parallax();
  if(!reduced)decoders();
 }

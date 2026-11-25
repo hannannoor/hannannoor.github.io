@@ -1,7 +1,7 @@
 import {installSectionScroll} from './section-scroll.js?v=16';
 import {installSearch} from './search.js?v=16';
 import {installFx} from './fx.js?v=19';
-import {installLab} from './lab.js?v=21';
+import {installLab} from './lab.js?v=24';
 import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=16';
 const $=s=>document.querySelector(s),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external='target="_blank" rel="noopener noreferrer"',motion=matchMedia('(prefers-reduced-motion: reduce)');
@@ -64,7 +64,14 @@ function selectNode(id,focusCamera=true){
  document.querySelectorAll('[data-node]').forEach(b=>{const active=b.dataset.node===id;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});graph?.select(id,focusCamera);
 }
 $('#node-buttons').addEventListener('click',e=>{const b=e.target.closest('[data-node]');if(b)selectNode(b.dataset.node);});$('#detail-links').addEventListener('click',e=>{const b=e.target.closest('[data-select-node]');if(b)selectNode(b.dataset.selectNode);});
-$('#browse-toggle').addEventListener('click',()=>{const open=$('#browse-toggle').getAttribute('aria-expanded')!=='true';$('#browse-toggle').setAttribute('aria-expanded',String(open));$('#connection-browser').hidden=!open;});
+function setBrowser(open){$('#browse-toggle').setAttribute('aria-expanded',String(open));$('#connection-browser').hidden=!open;}
+// On the page there's no room for the list, so browsing opens the explorer with the list showing.
+$('#browse-toggle').addEventListener('click',async()=>{
+ const open=$('#browse-toggle').getAttribute('aria-expanded')!=='true';
+ const has3d=$('#network-fallback').hidden;
+ if(open&&has3d&&!$('#network-zone').classList.contains('fullscreen')){setBrowser(true);await setFullscreen(true);$('#node-buttons button')?.focus({preventScroll:true});return;}
+ setBrowser(open);
+});
 $('#trace-button').addEventListener('click',()=>{const to=$('#trace-to').value;if(!to){$('#trace-result').textContent='Choose a destination.';return;}const path=shortestPath(selectedNode,to);$('#trace-result').textContent=path.map(id=>nodes.find(n=>n.id===id).label).join(' → ');graph?.trace(path);});
 $('#reset-network').addEventListener('click',()=>{selectNode('hannan',false);graph?.reset();$('#trace-result').textContent='';});
 $('#pause-network').addEventListener('click',()=>{const paused=$('#pause-network').getAttribute('aria-pressed')!=='true';$('#pause-network').setAttribute('aria-pressed',String(paused));$('#pause-network').textContent=paused?'RESUME MOTION':'PAUSE MOTION';graph?.pause(paused);});
@@ -115,7 +122,7 @@ async function setFullscreen(open,id){
    await stage.animate([restPose,poseFor(to,from,10)],{duration:700,easing:'cubic-bezier(.65,0,.2,1)',fill:'forwards'}).finished.catch(()=>{});await bg.finished.catch(()=>{});
   }
   zone.getAnimations({subtree:true}).forEach(a=>a.cancel());zone.classList.remove('is-morphing');
-  zone.classList.remove('fullscreen');zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus({preventScroll:true});
+  zone.classList.remove('fullscreen');if($('#network-fallback').hidden)setBrowser(false);zone.removeAttribute('role');zone.removeAttribute('aria-modal');placeholder.remove();placeholder=null;$('#close-network').hidden=true;$('#expand-network').setAttribute('aria-expanded','false');lockBackground(false);syncLock();selectNode('hannan',false);graph?.resize();fullscreenFocus?.isConnected&&fullscreenFocus.focus({preventScroll:true});
  }
  }finally{transitioning=false;}
 }
