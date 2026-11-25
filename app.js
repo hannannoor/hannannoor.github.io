@@ -1,7 +1,7 @@
 import {installSectionScroll} from './section-scroll.js?v=16';
 import {installSearch} from './search.js?v=16';
-import {installFx} from './fx.js?v=18';
-import {installLab} from './lab.js?v=20';
+import {installFx} from './fx.js?v=19';
+import {installLab} from './lab.js?v=21';
 import {projects,nodes,events,certificates,collections,relatedNodes,shortestPath} from './content.js?v=16';
 const $=s=>document.querySelector(s),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external='target="_blank" rel="noopener noreferrer"',motion=matchMedia('(prefers-reduced-motion: reduce)');

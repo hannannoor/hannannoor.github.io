@@ -11,7 +11,7 @@ const onVisible=(els,fn,opts={threshold:.35})=>{
 /* ---------- Background ---------- */
 function background(){
  const bg=document.createElement('div');bg.className='lab-bg';bg.setAttribute('aria-hidden','true');
- bg.innerHTML='<div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div><div class="grid"></div><div class="spot"></div><div class="noise"></div>';
+ bg.innerHTML='<div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div><div class="spot"></div><div class="noise"></div>';
  document.body.prepend(bg);
  if(!fine||reduced)return;
  const spot=bg.querySelector('.spot');let x=-999,y=-999,raf=0;

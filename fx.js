@@ -3,7 +3,7 @@
 // visitor prefers reduced motion, and pointer effects only run with a real mouse.
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
-import {installCursorTrail} from './cursor-trail.js?v=17';
+import {installCursorTrail} from './cursor-trail.js?v=18';
 
 /* ---------- Section transitions ---------- */
 function installCurtain({header}){
@@ -126,6 +126,7 @@ export function installFx({header}){
  installCurtain({header});installDialogMotion();
  if(finePointer.matches){
   installCursorTrail({
+   isOff:t=>!!t.closest?.('#network-zone'),
    isLink:t=>!!t.closest?.('a,button,label,summary,[role=button]')&&!t.closest('.project-visual'),
    labelFor:t=>t.closest?.('.project-visual')?'View project':t.closest?.('.event-card,.certificate-card,.gallery-item')?'Open':''
   });

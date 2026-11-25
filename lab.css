@@ -11,11 +11,8 @@ html{background:var(--paper);overflow-x:clip}
 body{background:transparent;color:var(--ink)}
 ::selection{background:#4f7dff66;color:#fff}
 
-/* ---------- Living background: grid + aurora + cursor glow ---------- */
+/* ---------- Living background: aurora + cursor glow ---------- */
 .lab-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:var(--paper)}
-.lab-bg .grid{position:absolute;inset:-80px;background-image:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:64px 64px;
- mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 85%);-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 85%);}
-@keyframes lab-grid{to{transform:translate(64px,64px)}}
 .lab-bg .aurora{position:absolute;width:70vmax;height:70vmax;border-radius:50%;opacity:.38}
 .lab-bg .a1{left:-20vmax;top:-25vmax;background:radial-gradient(circle,#2f5bffaa,#2f5bff33 35%,transparent 68%)}
 .lab-bg .a2{right:-25vmax;top:30vh;background:radial-gradient(circle,#00b8ff99,#00b8ff22 35%,transparent 68%);opacity:.18}
@@ -118,7 +115,7 @@ html.lab .contact h2>span:not(.fx-word){color:#9fbaff}
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
- .lab-bg .grid,.lab-bg .aurora,.lab-shine,.lab-ticker-track{animation:none!important}
+ .lab-bg .aurora,.lab-shine,.lab-ticker-track{animation:none!important}
  .lab-float{display:none}
 }
 @media (max-width:760px){
