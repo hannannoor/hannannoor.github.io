@@ -1,0 +1,141 @@
+/* =========================================================================
+   LAB THEME: dark "AI lab" look across the whole site.
+   Loaded last; overrides the light palette and adds the new effects.
+   ========================================================================= */
+:root{
+ --paper:#060a13;--ink:#e9eefb;--muted:#8e9cb4;--line:#1c2840;--white:#0c1321;--dark:#03060c;
+ --accent:#4f7dff;--accent-ink:#86a5ff;--glow:#3a6bff;--cyan:#5ee2ff;
+ color-scheme:dark;
+}
+html{background:var(--paper);overflow-x:clip}
+body{background:transparent;color:var(--ink)}
+::selection{background:#4f7dff66;color:#fff}
+
+/* ---------- Living background: grid + aurora + cursor glow ---------- */
+.lab-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:var(--paper)}
+.lab-bg .grid{position:absolute;inset:-80px;background-image:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:64px 64px;
+ mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 85%);-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 85%);}
+@keyframes lab-grid{to{transform:translate(64px,64px)}}
+.lab-bg .aurora{position:absolute;width:70vmax;height:70vmax;border-radius:50%;opacity:.38}
+.lab-bg .a1{left:-20vmax;top:-25vmax;background:radial-gradient(circle,#2f5bffaa,#2f5bff33 35%,transparent 68%)}
+.lab-bg .a2{right:-25vmax;top:30vh;background:radial-gradient(circle,#00b8ff99,#00b8ff22 35%,transparent 68%);opacity:.18}
+.lab-bg .a3{left:20vw;bottom:-40vmax;background:radial-gradient(circle,#6a3dffaa,#6a3dff22 35%,transparent 68%);opacity:.2}
+.lab-bg .spot{position:absolute;left:0;top:0;width:640px;height:640px;margin:-320px;border-radius:50%;background:radial-gradient(circle,#4f7dff1f,transparent 60%);transform:translate(var(--mx,-999px),var(--my,-999px));transition:opacity .4s}
+.lab-bg .noise{position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- Surfaces: every former light panel becomes dark glass ---------- */
+.site-header{background:#060a13b8!important;backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid #ffffff12!important;color:var(--ink)}
+.site-header a,.site-header button,.site-header .brand{color:var(--ink)}
+.site-header nav a[aria-current],.site-header nav a.active{color:var(--accent-ink)!important}
+main>section,.work,.about,.beyond,.credential-section{background:transparent!important;color:var(--ink)}
+.hero{background:transparent!important}
+.section-pager{background:#0c1321d9!important;border:1px solid #ffffff1a!important;color:var(--ink);backdrop-filter:blur(10px)}
+.section-pager button{color:var(--ink)}
+.search-trigger{background:#ffffff0a;border-color:#ffffff24;color:var(--ink)}
+.search-trigger:hover{background:#ffffff14;border-color:var(--accent)}
+.search-trigger kbd{background:#ffffff0f;border-color:#ffffff24;color:var(--muted)}
+
+/* cards and panels */
+.project-visual,.event-card,.certificate-card,.credential-card,.archive-row,.about-card,.skill-card,.case-study,.dialog-panel,.featured-event,.community-panel,.academic-panel{border-color:#ffffff14!important}
+.project-visual{background:#0e1626!important;border:1px solid #ffffff14;border-radius:14px;overflow:hidden}
+.archive-row{border-color:#ffffff14!important}
+.archive-row:hover{background:#ffffff06}
+
+/* text tones */
+.mono,.eyebrow,.section-top span,.kicker{color:var(--muted)}
+a{color:inherit}
+.text-link,.project-links a,.archive-row a{color:var(--accent-ink)}
+h1,h2,h3,.display{color:var(--ink)}
+
+/* dialogs */
+dialog{background:#0b1220!important;color:var(--ink)!important;border:1px solid #ffffff1a!important}
+dialog::backdrop{background:#02040acc!important;backdrop-filter:blur(8px)}
+
+/* search panel */
+.search-box{background:#0b1220;border-color:#ffffff1a}
+.search-field{border-color:#ffffff14}.search-field input{color:var(--ink)}
+.search-result.active{background:#4f7dff1f}.search-title{color:var(--ink)}.search-sub{color:var(--muted)}
+.search-status button,.search-result.active .search-network{background:#ffffff0a;border-color:#ffffff24}
+.search-help{border-color:#ffffff14}.search-main img,.search-glyph{background:#16213a}
+
+/* ---------- Headings: gradient shimmer on the big display type ---------- */
+.lab-shine{background:linear-gradient(100deg,var(--ink) 0%,var(--ink) 40%,#9fb8ff 48%,#fff 50%,#9fb8ff 52%,var(--ink) 60%,var(--ink) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:lab-shine 7s cubic-bezier(.6,0,.2,1) infinite}
+@keyframes lab-shine{0%,55%{background-position:100% 0}100%{background-position:-50% 0}}
+
+/* ---------- Decoding labels ---------- */
+.lab-decode{font-variant-ligatures:none}
+.lab-decode .g{color:var(--cyan);opacity:.9}
+
+/* ---------- Ticker bands ---------- */
+.lab-ticker{position:relative;overflow:hidden;padding:26px 0;margin:0;border-block:1px solid #ffffff12;background:#ffffff03;
+ mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.lab-ticker-track{display:flex;width:max-content;gap:0;animation:lab-ticker var(--dur,42s) linear infinite}
+.lab-ticker.reverse .lab-ticker-track{animation-direction:reverse}
+.lab-ticker:hover .lab-ticker-track{animation-play-state:paused}
+.lab-ticker span{display:inline-flex;align-items:center;gap:34px;padding-right:34px;font:400 clamp(34px,5.4vw,84px)/1 var(--display);letter-spacing:-.04em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px #ffffff3d;transition:color .3s}
+.lab-ticker span:nth-child(3n+1){color:var(--ink);-webkit-text-stroke:0}
+.lab-ticker span i{font-style:normal;color:var(--accent);-webkit-text-stroke:0;font-size:.55em}
+@keyframes lab-ticker{to{transform:translateX(-50%)}}
+
+/* ---------- Glowing card borders that follow the cursor ---------- */
+.lab-glow{position:relative;isolation:isolate}
+.lab-glow:before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;z-index:5;
+ background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),#7ea0ffcc,#4f7dff40 40%,transparent 70%);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s}
+.lab-glow:hover:before{opacity:1}
+
+/* ---------- Floating preview for the project list ---------- */
+.lab-float{position:fixed;left:0;top:0;z-index:60;width:300px;aspect-ratio:4/3;border-radius:12px;overflow:hidden;pointer-events:none;opacity:0;scale:.85;
+ transition:opacity .25s,scale .35s cubic-bezier(.2,.9,.25,1);box-shadow:0 30px 80px -20px #000c,0 0 0 1px #ffffff1f;background:#0e1626}
+.lab-float.on{opacity:1;scale:1}
+.lab-float img{width:100%;height:100%;object-fit:cover;display:block}
+.lab-float:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,#060a13aa)}
+
+/* ---------- Big section numbers ---------- */
+.lab-num{position:absolute;right:var(--gutter);top:40px;font:400 clamp(120px,18vw,300px)/.8 var(--display);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px #ffffff12;pointer-events:none;z-index:0;user-select:none}
+main>section{position:relative}
+main>section>*{position:relative;z-index:1}
+
+/* ---------- Scroll-linked image parallax ---------- */
+.lab-parallax{will-change:transform}
+
+/* ---------- Fix: the contact heading's indent rule was hitting each animated word ---------- */
+.contact .display>.fx-word{margin-left:0!important;font-size:1em!important}
+
+/* ---------- Readable text on dark (old greys were tuned for the light page) ---------- */
+html.lab main :is(p,li,dd,small):not(.lab-num){color:#b3bfd3!important}
+html.lab main :is(strong,b){color:#e9eefb!important}
+html.lab main :is(.mono,span.mono,p.mono,.project-card span,.archive-row span,.project-meta span):not(.status-dot):not(.network-axis){color:#8fa0bb!important}
+html.lab main .project-tagline{color:#d4dcea!important}
+html.lab main :is(.text-link,.project-links a,.archive-row a,.dialog-links a,p a,li a){color:var(--accent-ink)!important}
+html.lab main :is(h2,h3,h4){color:var(--ink)}
+html.lab .contact h2>span:not(.fx-word){color:#9fbaff}
+.service-panel{background:#0e1626!important;border:1px solid #ffffff14}
+.service-panel p{color:#b3bfd3!important}
+.certificate-preview{background:#0e1626!important;border-color:#ffffff1a!important}
+.lab-ticker span{color:transparent}
+.lab-ticker span:nth-child(3n+1){color:var(--ink)}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+ .lab-bg .grid,.lab-bg .aurora,.lab-shine,.lab-ticker-track{animation:none!important}
+ .lab-float{display:none}
+}
+@media (max-width:760px){
+ .lab-bg .spot,.lab-float{display:none}
+ .lab-num{font-size:110px;top:24px;right:12px}
+ .lab-ticker{padding:16px 0}
+}
+html.lab .certificate-placeholder{background:linear-gradient(135deg,#132449,#0c1528)!important;color:#c9d7ff!important;border:1px solid #4f7dff40}
+
+/* Hero name extras */
+.lab-glow-text{text-shadow:0 0 28px #4f7dff99,0 0 80px #4f7dff55}
+#hero-name .name-line>span{font-variant-numeric:tabular-nums}
+/* Contact: glowing backdrop and gradient type */
+.contact{overflow:hidden}
+.contact:after{content:'';position:absolute;z-index:0;left:50%;top:45%;width:min(1100px,120vw);aspect-ratio:1;translate:-50% -50%;border-radius:50%;
+ background:radial-gradient(circle,#3a6bff55,#3a6bff18 40%,transparent 68%);pointer-events:none;animation:lab-breathe 7s ease-in-out infinite;will-change:transform}
+@keyframes lab-breathe{50%{scale:1.12;opacity:.8}}
+html.lab .contact .contact-question{color:var(--cyan);text-shadow:0 0 30px #5ee2ff99}
+html.lab .contact-email{font-size:clamp(24px,2.4vw,36px)}
+@media (prefers-reduced-motion:reduce){.contact:after{animation:none}}
