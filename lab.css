@@ -129,13 +129,12 @@ html.lab .contact h2>span:not(.fx-word){color:#9fbaff}
 html.lab .certificate-placeholder{background:linear-gradient(135deg,#132449,#0c1528)!important;color:#c9d7ff!important;border:1px solid #4f7dff40}
 
 /* Hero name extras */
-.lab-glow-text{text-shadow:0 0 28px #4f7dff99,0 0 80px #4f7dff55}
 #hero-name .name-line>span{font-variant-numeric:tabular-nums}
 /* Contact: glowing backdrop and gradient type */
 .contact{overflow:hidden}
 .contact:after{content:'';position:absolute;z-index:0;left:50%;top:45%;width:min(1100px,120vw);aspect-ratio:1;translate:-50% -50%;border-radius:50%;
  background:radial-gradient(circle,#3a6bff55,#3a6bff18 40%,transparent 68%);pointer-events:none;animation:lab-breathe 7s ease-in-out infinite;will-change:transform}
 @keyframes lab-breathe{50%{scale:1.12;opacity:.8}}
-html.lab .contact .contact-question{color:var(--cyan);text-shadow:0 0 30px #5ee2ff99}
+html.lab .contact .contact-question{color:var(--cyan)}
 html.lab .contact-email{font-size:clamp(24px,2.4vw,36px)}
 @media (prefers-reduced-motion:reduce){.contact:after{animation:none}}
