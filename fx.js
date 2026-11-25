@@ -127,7 +127,7 @@ export function installFx({header}){
  if(finePointer.matches){
   installCursorTrail({
    isLink:t=>!!t.closest?.('a,button,label,summary,[role=button]')&&!t.closest('.project-visual'),
-   labelFor:t=>t.closest?.('#network-canvas')?'Drag to explore':t.closest?.('.project-visual,.archive-row')?'View project':t.closest?.('.event-card,.certificate-card,.gallery-item')?'Open':''
+   labelFor:t=>t.closest?.('.project-visual,.archive-row')?'View project':t.closest?.('.event-card,.certificate-card,.gallery-item')?'Open':''
   });
   installMagnetic();installTilt();
  }
